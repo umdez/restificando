@@ -10,6 +10,17 @@
  * Versão atual 0.0.1-Beta
  */
 
+/* Exporta uma função para o tipo de associação One-To-Many. Esse tipo de associação conecta
+ * um modelo fonte especifico com multiplos modelos alvos.
+ * 
+ * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
+ * possuiMuitas ou HasMany. Existem vários tipos de associações em um banco de dados.
+ * Cada associação denota um tipo de relação entre modelos dum banco de dados qualquer. 
+ * E aqui, nós temos uma associação de Um-para-Muitos (One-To-Many). Essa associação de 
+ * Um-para-Muitos faz a conexão de uma fonte com multiplos alvos e, além disso, estes alvos
+ * estão também conectados a uma fonte específica. Lembre-se que nesse tipo de relação, a
+ * chave extrangeira da fonte ficará no(s) modelo(s) alvos.
+ ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
   var subNomeDaFonte = associacao.alvo.opcoes.nome.plural.toLowerCase();

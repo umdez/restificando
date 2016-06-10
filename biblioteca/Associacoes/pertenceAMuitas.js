@@ -12,6 +12,14 @@
 
 var _ = require('lodash');
 
+/* Exporta uma função para o tipo de associação Belongs-To-Many. Esse tipo de associação 
+ * conecta um modelo fonte especifico com multiplos modelos alvos. Posteriormente os alvos
+ * podem também ter conexões com multiplos modelos fonte.
+ * 
+ * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
+ * pertenceAMuitas ou belongsToMany. Existem vários tipos de associações em um banco de dados.
+ * Cada associação denota um tipo de relação entre modelos dum banco de dados qualquer. 
+ ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
   var subNomeDaFonte = associacao.alvo.opcoes.nome.plural.toLowerCase();
