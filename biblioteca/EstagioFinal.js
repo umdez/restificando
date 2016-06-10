@@ -21,7 +21,7 @@
  * PUT /usuarios/:identificador (Atualização de um registro de usuários) (Update)
  * DELETE /usuarios/:identificador (Apaga um registro dos usuários) (Delete)
  *
- * @Parametro {Texto} [estagioFinal] Texto contendo atributos de determinado estágio.
+ * @Parametro {Texto} [estagioFinal] Contêm um estágio final e seus atributos.
  ----------------------------------------------------------------------------------------*/
 var EstagioFinal = function(estagioFinal) {
   

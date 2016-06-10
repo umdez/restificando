@@ -9,7 +9,6 @@
  *
  * Versão atual 0.0.1-Beta
  */
- 
 
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
