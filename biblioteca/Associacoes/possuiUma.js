@@ -10,6 +10,14 @@
  * Versão atual 0.0.1-Beta
  */
 
+/* Exporta uma função para a associação hasOne.
+ * 
+ * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
+ * possuiUma ou HasOne. Existem vários tipos de associações entre modelos em um banco de dados.
+ * Cada associação denota um tipo de relação entre modelos dum banco de dados qualquer. E aqui,
+ * temos uma relação de um-para-um (one-to-one). Lembre-se que nesse tipo de relação, a chave 
+ * extrangeira existe no modelo alvo.
+ ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
   var subNomeDaFonte = associacao.alvo.opcoes.nome.singular.toLowerCase();
