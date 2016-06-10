@@ -19,7 +19,7 @@ Os endpoints são as rotas associadas a um determinado modelo. Por exemplo, imag
 terá os seguintes endpoints:
  
 - POST /usuarios                  (Cria um registro de usuário) (Create)
-- GET /usuarios                   (Pega uma lista de registros de usuarios) (Read)
+- GET /usuarios                   (Pega uma lista de registros de usuarios) (List)
 - GET /usuarios/:identificador    (Pega um unico registro de usuarios passando um identificador) (Read)
 - PUT /usuarios/:identificador    (Atualização de um registro de usuários) (Update)
 - DELETE /usuarios/:identificador (Apaga um registro dos usuários) (Delete)
