@@ -159,21 +159,81 @@ var Fonte = function(opcoes) {
   });
 
   // Uma copia de provisão dos dados associados para uso posterior 
-  meuObjt.associationsInfo = {};
+  meuObjt.InformacoesDasAssociacoes = {};
   if (meuObjt.incluir && meuObjt.incluir.length) {
     meuObjt.incluir.forEach(function(i) {
-      var primaryKey = i.modelo.primaryKeyField,
-          associations = _.values(meuObjt.modelo.associations).filter(function(a) {
-            return a.target === i.modelo;
-          });
+      var chavePrimaria = i.modelo.primaryKeyField;
+      var associacoes = _.values(meuObjt.modelo.associations).filter(function(a) {
+        return a.target === i.modelo;
+      });
 
-      associations.forEach(function(association) {
-        meuObjt.associationsInfo[association.identifier] = {
-          identifier: association.identifier,
-          primaryKey: primaryKey,
-          as: association.as
+      associacoes.forEach(function(associacao) {
+        meuObjt.InformacoesDasAssociacoes[associacao.identifier] = {
+          identificador: associacao.identifier,
+          chavePrimaria: chavePrimaria,
+          como: associacao.as
         };
       });
     });
   }
 };
+
+Fonte.prototype.usar = function(mediador) {
+  var meuObjt = this,
+  var acoes = _.clone(meuObjt.acoes);
+
+  acoes.push('todos');
+  acoes.forEach(function(acao) {
+    if (_.has(mediador, acao)) {
+      _.forOwn(mediador[acao], function(definicao, percursos) {
+        if (_.isFunction(definicao)) {
+          meuObjt[acao][percursos](definicao);
+        } else {
+          if (_.has(definicao, 'acao')) meuObjt[acao][percursos](definicao.acao);
+          if (_.has(definicao, 'antesQue')) meuObjt[acao][percursos].antesQue(definicao.antesQue);
+          if (_.has(definicao, 'depoisDe')) meuObjt[acao][percursos].depoisDe(definicao.depoisDe);
+        }
+      });
+    }
+  });
+
+  if (_.has(mediador, 'configuracaoExtra') && _.isFunction(mediador.configuracaoExtra)) {
+    mediador.configuracaoExtra(this);
+  }
+};
+
+function autoAssociar(fonte) {
+  if (!fonte.modelo.associations) {
+    return;
+  }
+  
+  _.forEach(fonte.modelo.associations, function(associacao) {
+    // for prefetched data in list and read
+    if (!!associacao.as) {
+      fonte.incluir.push({ modelo: associacao.target, como: associacao.as });
+    } else {
+      fonte.incluir.push(associacao.target);
+    }
+
+    var subResourceName;
+    if (associacao.associationType === 'HasOne') {
+      subResourceName =
+        associacao.target.options.name.singular.toLowerCase();
+      fonte[subResourceName] = hasOneResource(Fonte, fonte, associacao);
+    } else if (associacao.associationType === 'HasMany') {
+      subResourceName =
+        associacao.target.options.name.plural.toLowerCase();
+      fonte[subResourceName] = hasManyResource(Fonte, fonte, associacao);
+    } else if (associacao.associationType === 'BelongsTo') {
+      subResourceName =
+        associacao.target.options.name.singular.toLowerCase();
+      fonte[subResourceName] = belongsToResource(Fonte, fonte, associacao);
+    } else if (associacao.associationType === 'BelongsToMany') {
+     subResourceName =
+       associacao.target.options.name.plural.toLowerCase();
+     fonte[subResourceName] = belongsToManyResource(Fonte, fonte, associacao);
+    }
+  });
+}
+
+module.exports = Fonte;

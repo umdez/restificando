@@ -28,7 +28,7 @@ var EstagioFinal = function(estagioFinal) {
   // Copiamos a linha completa do estágio final.
   this.linha = estagioFinal;  
   
-  // Separamos os atributos deste estário.
+  // Separamos os atributos deste estágio.
   this.atributos = estagioFinal
     .split('/')
     .filter(function(c) { return ~c.indexOf(':') && ~~c.indexOf(':unused'); })
