@@ -10,7 +10,7 @@
  * Versão atual 0.0.1-Beta
  */
 
-/* Exporta uma função para o tipo de associação One-To-Many. Esse tipo de associação conecta
+/* Exporta uma função para realizar o tipo de associação One-To-Many. Esse tipo de associação conecta
  * um modelo fonte especifico com multiplos modelos alvos.
  * 
  * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
@@ -20,6 +20,10 @@
  * Um-para-Muitos faz a conexão de uma fonte com multiplos alvos e, além disso, estes alvos
  * estão também conectados a uma fonte específica. Lembre-se que nesse tipo de relação, a
  * chave extrangeira da fonte ficará no(s) modelo(s) alvos.
+ *
+ * @Parametro {Objeto} [Fonte] Contêm objeto com atributos e métodos para uma fonte.
+ * @Parametro {Objeto} [fonte] 
+ * @Parametro {Objeto} [associacao] 
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
