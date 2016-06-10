@@ -5,9 +5,9 @@
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id EstagioFinal.js, 31/05/2016 18:24:14 umdez $
+ * $Id EstagioFinal.js, criado em 31/05/2016 às 18:24:14 por Leo Felippe $
  *
- * v0.0.1-Beta
+ * Versão atual 0.0.1-Beta
  */
 
 /* @Objeto EstagioFinal(). 
