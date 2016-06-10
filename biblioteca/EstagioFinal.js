@@ -11,12 +11,22 @@
  */
 
 /* @Objeto EstagioFinal(). 
- * Contêm o texto do estágio final e seus atributos. 
+ * Contêm o linha que é o texto do estágio final e seus atributos. Os estágios finais, são 
+ * as rotas associadas a um determinado modelo. Por exemplo, imagine o modelo 'usuarios', ele
+ * terá os seguintes estágios finais que estão listados abaixo:
+ *
+ * POST /usuarios (Cria um registro de usuário) (Create)
+ * GET /usuarios (Pega uma lista de registros de usuarios) (List)
+ * GET /usuarios/:identificador (Pega um unico registro de usuarios passando um identificador) (Read)
+ * PUT /usuarios/:identificador (Atualização de um registro de usuários) (Update)
+ * DELETE /usuarios/:identificador (Apaga um registro dos usuários) (Delete)
  *
  * @Parametro {Texto} [estagioFinal] Texto contendo atributos de determinado estágio.
  ----------------------------------------------------------------------------------------*/
 var EstagioFinal = function(estagioFinal) {
-  this.linha = estagioFinal;
+  
+  this.linha = estagioFinal;  // Copiamos a linha completa do estágio final.
+  
   this.atributos = estagioFinal
     .split('/')
     .filter(function(c) { return ~c.indexOf(':') && ~~c.indexOf(':unused'); })
