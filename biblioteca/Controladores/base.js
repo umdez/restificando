@@ -159,18 +159,18 @@ Controlador.prototype._controle = function(req, res) {
                   resolve(contexto.skip);
                 },
                 stop: function() {
-                  resolve(new errors.RequestCompleted());
+                  resolve(new erros.RequestCompleted());
                 },
                 continue: function() {
                   resolve(contexto.continue);
                 },
-                error: function(status, message, errorList, cause) {
+                error: function(status, message, listaDeErros, cause) {
                   // if the second parameter is undefined then we are being
                   // passed an error to rethrow, otherwise build an EpilogueError
-                  if (_.isUndefined(message) || status instanceof errors.EpilogueError) {
+                  if (_.isUndefined(message) || status instanceof erros.EpilogueError) {
                     resolve(status);
                   } else {
-                    resolve(new errors.EpilogueError(status, message, errorList, cause));
+                    resolve(new erros.EpilogueError(status, message, listaDeErros, cause));
                   }
                 }
               });
@@ -210,20 +210,21 @@ Controlador.prototype._controle = function(req, res) {
   });
 
   cadeiaDeGanchos
-    .catch(errors.RequestCompleted, _.noop)
-    .catch(meuObjt.modelo.sequelize.ValidationError, function(err) {
-      var errorList = _.reduce(err.errors, function(result, error) {
-        result.push({ field: error.path, message: error.message });
-        return result;
+    .catch(erros.RequisicaoCompleta, _.noop)
+    .catch(meuObjt.modelo.sequelize.ValidationError, function(erro) {
+      var listaDeErros = _.reduce(erro.errors, function(resultado, erro) {
+        resultado.push({ field: erro.path, message: erro.message });
+        return resultado;
       }, []);
 
-      meuObjt.erro(req, res, new errors.BadRequestError(err.message, errorList, err));
+      meuObjt.erro(req, res, new erros.ErroDeRequisicaoRuim(erro.message, listaDeErros, erro));
     })
-    .catch(errors.EpilogueError, function(err) {
-      meuObjt.erro(req, res, err);
+    .catch(erros.RestificandoErro, function(erro) {
+      meuObjt.erro(req, res, erro);
     })
-    .catch(function(err) {
-      meuObjt.erro(req, res, new errors.EpilogueError(500, 'internal error', [err.message], err));
+    .catch(function(erro) {
+      // Aqui os erros internos do nosso serviço.
+      meuObjt.erro(req, res, new erros.RestificandoErro(500, 'erro interno', [erro.mensagem], erro));
     });
 };
 

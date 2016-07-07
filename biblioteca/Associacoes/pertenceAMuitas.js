@@ -5,7 +5,7 @@
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id pertenceAMuitas.js, criado em 31/05/2016 às 18:41:23 por Leo Felippe $
+ * $Id pertenceAMuitas.js, criado em 31/05/2016 às 18:41 por Leo Felippe $
  *
  * Versão atual 0.0.1-Beta
  */

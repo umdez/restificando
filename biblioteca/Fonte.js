@@ -16,10 +16,10 @@
  */
 
 var Controladores = require('./Controladores/indice');
-var possuiUmaFonte = require('./Associacoes/possuiUma');
-var possuiMuitasFontes = require('./Associacoes/possuiMuitas');
-var pertenceAUmaFonte = require('./Associacoes/pertenceAUma');
-var pertenceAMuitasFontes = require('./Associacoes/pertenceAMuitas');
+//var possuiUmaFonte = require('./Associacoes/possuiUma');
+//var possuiMuitasFontes = require('./Associacoes/possuiMuitas');
+//var pertenceAUmaFonte = require('./Associacoes/pertenceAUma');
+//var pertenceAMuitasFontes = require('./Associacoes/pertenceAMuitas');
 var _ = require('lodash');
 
 /* @Objeto Fonte().
@@ -47,7 +47,7 @@ var _ = require('lodash');
  *  - opcoes.acoes (Opcional) As ações aceitas por esta fonte. 
  *  - opcoes.seRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
  *  - opcoes.seRecarregarInstancias (Opcional)
- *  - opcoes.incluir (Opcional)
+ *  - opcoes.incluir (Opcional) Vamos incluir mais alguns modelos?
  *  - opcoes.excluirAtributos (Opcional) Os atributos não necessários e que devem ser excluidos.
  *  - opcoes.busca.parametro (Opcional) O parametro utilizado para a busca.
  *  - opcoes.sorteio.parametro (Opcional) O parametro utilizado para sorteio.
@@ -55,7 +55,7 @@ var _ = require('lodash');
  *  - opcoes.sequelize (Obrigatório) O ORM (Object-relational mapping) Sequelize.
  *  - opcoes.modelo (Obrigatório) Um modelo do Sequelize.
  *  - opcoes.estagiosFinais (Obrigatório) Os estágio de determinada fonte.
- *  - opcoes.metodoDeAtualizacao
+ *  - opcoes.metodoDeAtualizacao (Opcional mas recomendado) Qual será o método para atualização?
  *  - opcoes.sePossuiAssociacoes (Opcional) Caso a fonte possua associações com outras fontes.
  ----------------------------------------------------------------------------------------*/
 var Fonte = function(opcoes) {
@@ -113,7 +113,7 @@ var Fonte = function(opcoes) {
     singular: opcoes.estagiosFinais[1] || opcoes.estagiosFinais[0]  // ex. '/exames/:id' ou '/exames' 
   };
   
-  // <umdez> O que é isso?
+  // Qual método de atualização? PUT, POST ou PATCH?
   this.metodoDeAtualizacao = opcoes.metodoDeAtualizacao;
   
   // Quer paginação?
@@ -135,7 +135,7 @@ var Fonte = function(opcoes) {
     if (_.isObject(opcoes.sePossuiAssociacoes)) {
       this.opcoesDeAssociacao = _.extend(this.opcoesDeAssociacao, opcoes.sePossuiAssociacoes);
     }
-    autoAssociar(this);
+    //autoAssociar(this);
   }
 
   this.controladores = {};
@@ -239,7 +239,7 @@ Fonte.prototype.usar = function(mediador) {
     mediador.configuracaoExtra(this);
   }
 };
-
+/*
 function autoAssociar(fonte) {
   if (!fonte.modelo.associations) {
     return;
@@ -273,5 +273,5 @@ function autoAssociar(fonte) {
     }
   });
 }
-
+*/
 module.exports = Fonte;

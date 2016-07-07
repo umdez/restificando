@@ -5,7 +5,7 @@
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id possuiMuitas.js, criado em 31/05/2016 às 18/40/55 por Leo Felippe $
+ * $Id possuiMuitas.js, criado em 31/05/2016 às 18:40 por Leo Felippe $
  *
  * Versão atual 0.0.1-Beta
  */

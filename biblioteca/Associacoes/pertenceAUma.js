@@ -5,7 +5,7 @@
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id pertenceAUma.js, criado em 31/05/2016 às 18:41:09 por Leo Felippe $
+ * $Id pertenceAUma.js, criado em 31/05/2016 às 18:41 por Leo Felippe $
  *
  * Versão atual 0.0.1-Beta
  */
