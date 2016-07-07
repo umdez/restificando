@@ -1,6 +1,7 @@
 # Restificando
-Contêm características para rotas.
+Contêm características avançadas para rotas.
 
 # Documentação
-- Uma breve introdução.
-- O que são os Percursos.
+- [Uma breve introdução](https://github.com/umdez/restificando/blob/master/docs/introducao.md)
+- [O que são os controladores]()
+- [O que são os Percursos](https://github.com/umdez/restificando/blob/master/docs/percursos.md)
