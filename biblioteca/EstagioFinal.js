@@ -5,7 +5,7 @@
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id EstagioFinal.js, criado em 31/05/2016 às 18:24:14 por Leo Felippe $
+ * $Id EstagioFinal.js, criado em 31/05/2016 às 18:24 por Leo Felippe $
  *
  * Versão atual 0.0.1-Beta
  */
@@ -15,18 +15,18 @@
  * as rotas associadas a um determinado modelo. Por exemplo, imagine o modelo 'usuarios', ele
  * terá os seguintes estágios finais que estão listados abaixo:
  *
- * POST /usuarios (Cria um registro de usuário) (Create)
- * GET /usuarios (Pega uma lista de registros de usuarios) (List)
- * GET /usuarios/:identificador (Pega um unico registro de usuarios passando um identificador) (Read)
- * PUT /usuarios/:identificador (Atualização de um registro de usuários) (Update)
- * DELETE /usuarios/:identificador (Apaga um registro dos usuários) (Delete)
+ * POST /usuarios                  (Cria um registro de usuário)                                  (Create)
+ * GET /usuarios                   (Pega uma lista de registros de usuarios)                      (List)
+ * GET /usuarios/:identificador    (Pega um unico registro de usuarios passando um identificador) (Read)
+ * PUT /usuarios/:identificador    (Atualização de um registro de usuários)                       (Update)
+ * DELETE /usuarios/:identificador (Apaga um registro dos usuários)                               (Delete)
  *
  * @Parametro {Texto} [estagioFinal] Contêm um estágio final e seus atributos.
  ----------------------------------------------------------------------------------------*/
 var EstagioFinal = function(estagioFinal) {
   
-  // Copiamos a linha completa do estágio final.
-  this.linha = estagioFinal;  
+  // Copiamos o texto completo do estágio final.
+  this.texto = estagioFinal;  
   
   // Separamos os atributos deste estágio.
   this.atributos = estagioFinal
