@@ -2,11 +2,11 @@
 
 Imagine que para um modelo chamado 'usuarios', teremos alguns controladores listados abaixo:
 
- - usuarios.create
- - usuarios.list
- - usuarios.read
- - usuarios.update
- - usuarios.delete
+ - usuarios.criar     (Create)
+ - usuarios.listar    (List)
+ - usuarios.ler       (Read)
+ - usuarios.atualizar (Update)
+ - usuarios.deletar   (Delete)
 
 Os **controladores** listados acima serão chamados sempre que houver uma requisição http em algum dos nossos **estágios finais**.
 Os **estágios finais** são as rotas associadas a um determinado modelo. Por exemplo, imagine o modelo 'usuarios', ele
