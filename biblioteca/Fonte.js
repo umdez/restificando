@@ -113,6 +113,7 @@ var Fonte = function(opcoes) {
     singular: opcoes.estagiosFinais[1] || opcoes.estagiosFinais[0]  // ex. '/exames/:id' ou '/exames' 
   };
   
+  // <umdez> O que é isso?
   this.metodoDeAtualizacao = opcoes.metodoDeAtualizacao;
   
   // Quer paginação?
@@ -122,7 +123,7 @@ var Fonte = function(opcoes) {
   this.busca = opcoes.busca;
   this.sorteio = opcoes.sorteio;
   
-  // O que é isso?
+  // <umdez> O que é isso?
   this.seRecarregarInstancias = opcoes.seRecarregarInstancias;
 
   this.opcoesDeAssociacao = {

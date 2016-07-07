@@ -25,7 +25,13 @@ var erros = require('../Erros');
  * fonte.ler       GET /fonte/:identificador    (Requisita um unico registro desta fonte passando um identificador) (Read)
  * fonte.atualizar PUT /fonte/:identificador    (Requisita a atualização de um registro desta fonte)                (Update)
  * fonte.deletar   DELETE /fonte/:identificador (Requisita a remoção de um registro desta fonte)                    (Delete)
- *
+ * 
+ * @Objeto {args} As configurações do nosso controlador.
+ *  - args.estagioFinal (Obrigatório) O estágio final com seus atributos. 
+ *  - args.aplicativo (Obrigatório) O aplicativo Express.
+ *  - args.modelo (Obrigatório) O modelo da fonte.
+ *  - args.incluir (Opcional) Mais modelos inclusos.
+ *  - args.fonte (Obrigatório) A fonte.
  ----------------------------------------------------------------------------------------*/
 var Controlador = function(args) {
   this.inicializar(args);
@@ -35,35 +41,36 @@ Controlador.prototype.inicializar = function(opcoes) {
   opcoes = opcoes || {};
   this.estagioFinal = new EstagioFinal(opcoes.estagioFinal);
   this.modelo = opcoes.modelo;
-  this.app = opcoes.app;
-  this.resource = opcoes.resource;
-  this.include = opcoes.include;
+  this.aplicativo = opcoes.aplicativo;
+  this.fonte = opcoes.fonte;
+  this.incluir = opcoes.incluir;
 
-  if (opcoes.include.length) {
-    var includeAttributes = [], includeModels = [];
-    opcoes.include.forEach(function(include) {
-      includeModels.push(!!include.modelo ? include.modelo : include);
+  if (opcoes.incluir.length) {
+    var incluirEstesAtributos = [];
+    var incluirEstesModelos = [];
+    opcoes.incluir.forEach(function(incluir) {
+      incluirEstesModelos.push(!!incluir.modelo ? incluir.modelo : incluir);
     });
 
-    _.forEach(this.modelo.associations, function(association) {
-      if (_.contains(includeModels, association.target))
-        includeAttributes.push(association.identifier);
+    _.forEach(this.modelo.associations, function(associacao) {
+      if (_.contains(incluirEstesModelos, associacao.target))
+        incluirEstesAtributos.push(associacao.identifier);
     });
-    this.includeAttributes = includeAttributes;
+    this.incluirEstesAtributos = incluirEstesAtributos;
   }
 
-  this.route();
+  this.rota();
 };
 
 /* @Propriedade {Matriz} [percursos] Contêm os nossos percursos básicos.
  *
- * fonte.controlador.iniciar    (Chamado no inicio)                                                    (Start) 
- * fonte.controlador.autenticar (Utilizado para autenticação)                                          (Auth)
- * fonte.controlador.trazer     (Caso necessário alguma rotina ao requisitar que dados sejam trazidos) (Fetch)
- * fonte.controlador.dados      (Caso seja necessário alguma rotina com os dados da fonte)             (Data)
- * fonte.controlador.escrever   (Caso seja necessário alguma rotina de escrita)                        (Write)
- * fonte.controlador.enviar     (Caso seja necessário alguma rotina de envio)                          (Send)
- * fonte.controlador.completar  (Chamado quando a requisição já estiver completa)                      (Complete)
+ * fonte.controlador.iniciar    (Chamado no inicio da requisição)                            (Start) 
+ * fonte.controlador.autenticar (Utilizado para autenticação e ou autorização da requisição) (Auth)
+ * fonte.controlador.trazer     (Traz dados da Database)                                     (Fetch)
+ * fonte.controlador.dados      (Fazer alguma transformação nos dados da Database)           (Data)
+ * fonte.controlador.escrever   (Escrever para a Database)                                   (Write)
+ * fonte.controlador.enviar     (Envia uma resposta para o usuário)                          (Send)
+ * fonte.controlador.completar  (Chamado quando a requisição já estiver completa)            (Complete)
  */
 Controlador.percursos = [
   'iniciar',     // Start 
@@ -75,84 +82,87 @@ Controlador.percursos = [
   'completar'    // Complete 
 ];
 
-Controlador.hooks = Controlador.percursos.reduce(function(hooks, milestone) {
-  ['_before', '', '_after'].forEach(function(modifier) {
-    hooks.push(milestone + modifier);
+/* Retorna ganchos para cada percurso. Por exemplo, para o percurso 'iniciar', teremos:
+ * 'iniciar_antesQue', 'iniciar' e também 'iniciar_depoisDe'. 
+ */
+Controlador.ganchos = Controlador.percursos.reduce(function(ganchos, percurso) {
+  ['_antesQue', '', '_depoisDe'].forEach(function(modificador) {
+    ganchos.push(percurso + modificador);
   });
 
-  return hooks;
+  return ganchos;
 }, []);
 
-Controlador.prototype.error = function(req, res, err) {
-  res.status(err.status);
+Controlador.prototype.erro = function(req, res, erro) {
+  res.status(erro.estatos);
   res.json({
-    message: err.message,
-    errors: err.errors
+    mensagem: erro.mensagem,
+    erros: erro.erros
   });
 };
 
-Controlador.prototype.send = function(req, res, context) {
-  res.json(context.instance);
-  return context.continue;
+Controlador.prototype.enviar = function(req, res, contexto) {
+  res.json(contexto.instancia);
+  return contexto.continue;
 };
 
-Controlador.prototype.route = function() {
-  var app = this.app,
-      estagioFinal = this.estagioFinal,
-      self = this;
-
-  // NOTE: is there a better place to do this mapping?
-  if (app.name === 'restify' && self.method === 'delete')
-    self.method = 'del';
-
-  app[self.method](estagioFinal.string, function(req, res) {
-    self._control(req, res);
+Controlador.prototype.rota = function() {
+  var aplicativo = this.aplicativo;
+  var estagioFinal = this.estagioFinal;
+  var meuObjt = this;
+  
+  aplicativo[meuObjt.metodo](estagioFinal.texto, function(req, res) {
+    meuObjt._controle(req, res);
   });
 };
 
-Controlador.prototype._control = function(req, res) {
-  var hookChain = Promessa.resolve(false),
-      self = this,
-      context = {
-        instance: undefined,
-        criteria: {},
-        attributes: {},
-        opcoes: {}
-      };
+Controlador.prototype._controle = function(req, res) {
+  var cadeiaDeGanchos = Promessa.resolve(false);
+  var meuObjt = this;
+  var contexto = {
+    instancia: undefined,
+    criterio: {},
+    atributos: {},
+    opcoes: {}
+  };
 
-  Controlador.percursos.forEach(function(milestone) {
-    if (!self[milestone])
+  Controlador.percursos.forEach(function(percurso) {
+    // Se já houver este percurso então retornamos aqui.
+    if (!meuObjt[percurso]) {
       return;
-
-    [milestone + '_before', milestone, milestone + '_after'].forEach(function(hook) {
-      if (!self[hook])
+    }
+    
+    [percurso + '_antesQue', percurso, percurso + '_depoisDe'].forEach(function(gancho) {
+      // Se já houver este gancho então retornamos aqui.
+      if (!meuObjt[gancho]) {
         return;
-
-      hookChain = hookChain.then(function runHook(skip) {
+      }
+      
+      cadeiaDeGanchos = cadeiaDeGanchos.then(function executarUmGancho(skip) {
         if (skip) return true;
 
-        var functions = Array.isArray(self[hook]) ? self[hook] : [self[hook]];
+        var functions = Array.isArray(meuObjt[gancho]) ? meuObjt[gancho] : [meuObjt[gancho]];
 
         // return the function chain. This means if the function chain resolved
-        // to skip then all the remaining hooks on this milestone will also be
-        // skipped and we will go to the next milestone
+        // to skip then all the remaining hooks on this percurso will also be
+        // skipped and we will go to the next percurso
         return functions.reduce(function(prev, current) {
           return prev.then(function runHookFunction(skipNext) {
 
             // if any asked to skip keep returning true to avoid calling further
-            // functions inside this hook
+            // functions inside this gancho
             if (skipNext) return true;
 
             var decisionPromise = new Promessa(function(resolve) {
-              _.assign(context, {
+              _.assign(contexto, {
                 skip: function() {
-                  resolve(context.skip);
+                  resolve(contexto.skip);
                 },
                 stop: function() {
                   resolve(new errors.RequestCompleted());
                 },
                 continue: function() {
-                  resolve(context.continue);
+                  resolve(contexto.continue);
                 },
                 error: function(status, message, errorList, cause) {
                   // if the second parameter is undefined then we are being
@@ -166,19 +176,19 @@ Controlador.prototype._control = function(req, res) {
               });
             });
 
-            return Promessa.resolve(current.call(self, req, res, context))
+            return Promessa.resolve(current.call(meuObjt, req, res, contexto))
               .then(function(result) {
                 // if they were returned directly or as a result of a promise
-                if (_.includes([context.skip, context.continue, context.stop], result)) {
+                if (_.includes([contexto.skip, contexto.continue, contexto.stop], result)) {
                   // call it to resolve the decision
                   result();
                 }
 
                 return decisionPromise.then(function(decision) {
-                  if (decision === context.continue) return false;
-                  if (decision === context.skip) return true;
+                  if (decision === contexto.continue) return false;
+                  if (decision === contexto.skip) return true;
 
-                  // must be an error/context.stop, throw the decision for error handling
+                  // must be an error/contexto.stop, throw the decision for error handling
                   if (process.domain) {
                     // restify wraps the server in domain and sets error handlers that get in the way of mocha
                     // https://github.com/dchester/epilogue/issues/83
@@ -192,34 +202,34 @@ Controlador.prototype._control = function(req, res) {
       });
     });
 
-    hookChain = hookChain.then(function() {
-      // clear any passed results so the next milestone will run even if a
+    cadeiaDeGanchos = cadeiaDeGanchos.then(function() {
+      // clear any passed results so the next percurso will run even if a
       // _after said to skip
       return false;
     });
   });
 
-  hookChain
+  cadeiaDeGanchos
     .catch(errors.RequestCompleted, _.noop)
-    .catch(self.modelo.sequelize.ValidationError, function(err) {
+    .catch(meuObjt.modelo.sequelize.ValidationError, function(err) {
       var errorList = _.reduce(err.errors, function(result, error) {
         result.push({ field: error.path, message: error.message });
         return result;
       }, []);
 
-      self.error(req, res, new errors.BadRequestError(err.message, errorList, err));
+      meuObjt.erro(req, res, new errors.BadRequestError(err.message, errorList, err));
     })
     .catch(errors.EpilogueError, function(err) {
-      self.error(req, res, err);
+      meuObjt.erro(req, res, err);
     })
     .catch(function(err) {
-      self.error(req, res, new errors.EpilogueError(500, 'internal error', [err.message], err));
+      meuObjt.erro(req, res, new errors.EpilogueError(500, 'internal error', [err.message], err));
     });
 };
 
-Controlador.prototype.milestone = function(name, callback) {
-  if (!_.includes(Controlador.hooks, name))
-    throw new Error('invalid milestone: ' + name);
+Controlador.prototype.percurso = function(name, callback) {
+  if (!_.includes(Controlador.ganchos, name))
+    throw new Error('invalid percurso: ' + name);
 
   if (!this[name]) {
     this[name] = [];
