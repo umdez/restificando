@@ -7,7 +7,7 @@ O restificando utiliza como dependencias o Express e também o Sequelize. Sendo 
     // Você poderá iniciar uma fonte no Restificando desta forma:
     restificando.fonte({
       modelo: modelo,
-      estagiosFinais: ['/plural/', 'singular/:identificador']
+      estagiosFinais: ['/plural/', '/singular/:identificador']
     });
     
     // Após iniciar uma fonte, é necessário apenas iniciar o serviço desta forma:
