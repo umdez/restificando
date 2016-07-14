@@ -7,7 +7,7 @@
  * 
  * $Id inicio.js, criado em 31/05/2016 às 18:20 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versão atual 0.0.2-Beta
  */
 
 var Fonte = require('./Fonte');
@@ -34,12 +34,14 @@ var restificando = {
    */
   inicializar: function(opcoes) {
     opcoes = opcoes || {};
-    if (!opcoes.aplicativo)
+    if (!opcoes.aplicativo) {
       throw new Error('Por favor, especifique o aplicativo Express.');
-
-    if (!opcoes.sequelize)
+    }
+    
+    if (!opcoes.sequelize) {
       throw new Error('Por favor, especifique uma instância do Sequelize.');
-
+    }
+    
     this.aplicativo = opcoes.aplicativo;
     this.sequelize = (opcoes.sequelize.Sequelize) ? opcoes.sequelize.Sequelize : opcoes.sequelize;
     this.base = opcoes.base || '';
