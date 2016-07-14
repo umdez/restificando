@@ -28,9 +28,10 @@ var _ = require('lodash');
  ----------------------------------------------------------------------------------------*/
 var restificando = {
   
-  /* @Objeto {opcoes} As configurações do nosso serviço restificando.
+  /* @Parametro {Objeto} [opcoes] As configurações do nosso serviço restificando.
    *  - opcoes.aplicativo (Obrigatório) O aplicativo Express.
    *  - opcoes.sequelize (Obrigatório) O ORM (Object-relational mapping) Sequelize.
+   *  - opcoes.base (Opcional) O endereço base do servidor REST. ex. https://algum-sitio.com.br/
    */
   inicializar: function(opcoes) {
     opcoes = opcoes || {};
@@ -56,7 +57,7 @@ var restificando = {
     }
   },
 
-  /* @Objeto {opcoes} As configurações da nossa fonte.
+  /* @Parametro {Objeto} [opcoes] As configurações da nossa fonte.
    *  - opcoes.acoes (Opcional) As ações aceitas por esta fonte. 
    *  - opcoes.seRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
    *  - opcoes.seRecarregarInstancias (Opcional)
@@ -65,8 +66,8 @@ var restificando = {
    *  - opcoes.busca.parametro (Opcional) O parametro utilizado para a busca.
    *  - opcoes.sorteio.parametro (Opcional) O parametro utilizado para sorteio.
    *  - opcoes.modelo (Obrigatório) Um modelo do Sequelize.
-   *  - opcoes.estagiosFinais (Obrigatório) Os estágio de determinada fonte.
-   *  - opcoes.metodoDeAtualizacao (Opcional mas recomendado) Qual será o método para atualização?
+   *  - opcoes.estagiosFinais (Opcional) Os estágio de determinada fonte.
+   *  - opcoes.metodoDeAtualizacao (Opcional mas recomendado) Qual será o método para atualização? PUT, POST ou PATCH?
    *  - opcoes.sePossuiAssociacoes (Opcional) Caso a fonte possua associações com outras fontes.
    */
   fonte: function(opcoes) {
@@ -87,6 +88,7 @@ var restificando = {
       opcoes.estagiosFinais.push('/' + plural + '/:id');
     }
 
+    // Incorporamos o endereço base ao estágio final.
     var estagiosFinais = [];
     opcoes.estagiosFinais.forEach(function(e) {
       var estagioFinal = this.base + e;
@@ -101,10 +103,10 @@ var restificando = {
       acoes: opcoes.acoes,                                    // As ações aceitas por esta fonte. 
       incluir: opcoes.incluir,                                // Vamos incluir mais alguns modelos?
       seRealizarPaginacao: opcoes.seRealizarPaginacao,        // Caso seja necessário habilitar a paginação para determinada fonte.
-      metodoDeAtualizacao: this.metodoDeAtualizacao,          // Qual será o método para atualização?
+      metodoDeAtualizacao: this.metodoDeAtualizacao,          // Qual será o método para atualização? PUT, POST ou PATCH?
       busca: opcoes.busca,                                    // O parametro utilizado para a busca.
       sorteio: opcoes.sorteio,                                // O parametro utilizado para sorteio.
-      seRecarregarInstancias: opcoes.seRecarregarInstancias,
+      seRecarregarInstancias: opcoes.seRecarregarInstancias,  // <umdez> Mas o que é isso?
       sePossuiAssociacoes: opcoes.sePossuiAssociacoes,        // Caso a fonte possua associações com outras fontes.
       excluirAtributos: opcoes.excluirAtributos               // Os atributos não necessários e que devem ser excluidos.
     });

@@ -7,7 +7,7 @@
  * 
  * $Id Fonte.js, criado em 31/05/2016 às 18:34 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versão atual 0.0.2-Beta
  */
  
 /* Histórico do desenvolvimento:
@@ -16,7 +16,7 @@
  */
 
 var Controladores = require('./Controladores/indice');
-//var possuiUmaFonte = require('./Associacoes/possuiUma');
+var possuiUmaFonte = require('./Associacoes/possuiUma');
 //var possuiMuitasFontes = require('./Associacoes/possuiMuitas');
 //var pertenceAUmaFonte = require('./Associacoes/pertenceAUma');
 //var pertenceAMuitasFontes = require('./Associacoes/pertenceAMuitas');
@@ -25,12 +25,12 @@ var _ = require('lodash');
 /* @Objeto Fonte().
  *
  * Aqui nós temos o objeto para uma fonte qualquer. Cada fonte possui controladores que estão listados abaixo:
- *
- * fonte.criar     POST /fonte                  (Requisita a criação de um registro para esta fonte)                (Create)
- * fonte.listar    GET /fonte                   (Requisita uma lista de registros desta fonte)                      (List)
- * fonte.ler       GET /fonte/:identificador    (Requisita um unico registro desta fonte passando um identificador) (Read)
- * fonte.atualizar PUT /fonte/:identificador    (Requisita a atualização de um registro desta fonte)                (Update)
- * fonte.deletar   DELETE /fonte/:identificador (Requisita a remoção de um registro desta fonte)                    (Delete)
+ * 
+ * fonte.criar     POST /fonte                          (Requisita a criação de um registro para esta fonte)                (Create)
+ * fonte.listar    GET /fonte                           (Requisita uma lista de registros desta fonte)                      (List)
+ * fonte.ler       GET /fonte/:identificador            (Requisita um unico registro desta fonte passando um identificador) (Read)
+ * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)                (Update)
+ * fonte.deletar   DELETE /fonte/:identificador         (Requisita a remoção de um registro desta fonte)                    (Delete)
  *
  * É necessário informar que para cada um destes controladores listados acima também possuirá os percursos, cada 
  * percurso será executado na ordem listada abaixo:
@@ -43,10 +43,10 @@ var _ = require('lodash');
  * fonte.controlador.enviar     (Caso seja necessário alguma rotina de envio)                          (Send)
  * fonte.controlador.completar  (Chamado quando a requisição já estiver completa)                      (Complete)
  *
- * @Objeto {opcoes} As configurações da nossa fonte.
+ * @Parametro {Objeto} [opcoes] As configurações da nossa fonte.
  *  - opcoes.acoes (Opcional) As ações aceitas por esta fonte. 
  *  - opcoes.seRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
- *  - opcoes.seRecarregarInstancias (Opcional)
+ *  - opcoes.seRecarregarInstancias (Opcional) <umdez> O que é isso?
  *  - opcoes.incluir (Opcional) Vamos incluir mais alguns modelos?
  *  - opcoes.excluirAtributos (Opcional) Os atributos não necessários e que devem ser excluidos.
  *  - opcoes.busca.parametro (Opcional) O parametro utilizado para a busca.
@@ -64,7 +64,7 @@ var Fonte = function(opcoes) {
   _.defaults(opcoes, {
     acoes: ['criar', 'listar', 'ler', 'atualizar', 'deletar'],
     seRealizarPaginacao: true,
-    seRecarregarInstancias: false,
+    seRecarregarInstancias: false,  // <umdez> O que é isso?
     incluir: [],
     excluirAtributos: []
   });
@@ -135,9 +135,10 @@ var Fonte = function(opcoes) {
     if (_.isObject(opcoes.sePossuiAssociacoes)) {
       this.opcoesDeAssociacao = _.extend(this.opcoesDeAssociacao, opcoes.sePossuiAssociacoes);
     }
-    //autoAssociar(this);
+    autoAssociar(this);
   }
 
+  // Aqui cada ação possui um controlador com estágio final.
   this.controladores = {};
   this.acoes.forEach(function(acao) {
     var Controlador = Controladores[acao];
@@ -153,22 +154,24 @@ var Fonte = function(opcoes) {
 
   }.bind(this));
 
+  // Ganchos dos percursos. ex. 'iniciar_antesQue', 'iniciar' e também 'iniciar_depoisDe'.
   var ganchos = Controladores.base.ganchos;
   var meuObjt = this;
-
+  
   this.acoes.forEach(function(acao) {
     meuObjt[acao] = meuObjt[acao] || {};
     ganchos.forEach(function(gancho) {
       meuObjt[acao][gancho] = function(f) {
-        meuObjt.controladores[acao].percursos(gancho, f);
+        meuObjt.controladores[acao].percurso(gancho, f);
       };
 
+      // <umdez> Ainda não sei como esta parte funciona, porque os ganchos estão sendo adicionados novamente.
       meuObjt[acao][gancho].antesQue = function(f) {
-        meuObjt.controladores[acao].percursos(gancho + '_antesQue', f);
+        meuObjt.controladores[acao].percurso(gancho + '_antesQue', f);
       };
 
       meuObjt[acao][gancho].depoisDe = function(f) {
-        meuObjt.controladores[acao].percursos(gancho + '_depoisDe', f);
+        meuObjt.controladores[acao].percurso(gancho + '_depoisDe', f);
       };
     });
   });
@@ -178,19 +181,19 @@ var Fonte = function(opcoes) {
   ganchos.forEach(function(gancho) {
     meuObjt.tudo[gancho] = function(f) {
       meuObjt.acoes.forEach(function(acao) {
-        meuObjt.controladores[acao].percursos(gancho, f);
+        meuObjt.controladores[acao].percurso(gancho, f);
       });
     };
 
     meuObjt.tudo[gancho].antesQue = function(f) {
       meuObjt.acoes.forEach(function(acao) {
-        meuObjt.controladores[acao].percursos(gancho + '_antesQue', f);
+        meuObjt.controladores[acao].percurso(gancho + '_antesQue', f);
       });
     };
 
     meuObjt.tudo[gancho].depoisDe = function(f) {
       meuObjt.acoes.forEach(function(acao) {
-        meuObjt.controladores[acao].percursos(gancho + '_depoisDe', f);
+        meuObjt.controladores[acao].percurso(gancho + '_depoisDe', f);
       });
     };
 
@@ -223,13 +226,13 @@ Fonte.prototype.usar = function(mediador) {
   acoes.push('todos');
   acoes.forEach(function(acao) {
     if (_.has(mediador, acao)) {
-      _.forOwn(mediador[acao], function(definicao, percursos) {
+      _.forOwn(mediador[acao], function(definicao, percurso) {
         if (_.isFunction(definicao)) {
-          meuObjt[acao][percursos](definicao);
+          meuObjt[acao][percurso](definicao);
         } else {
-          if (_.has(definicao, 'acao')) meuObjt[acao][percursos](definicao.acao);
-          if (_.has(definicao, 'antesQue')) meuObjt[acao][percursos].antesQue(definicao.antesQue);
-          if (_.has(definicao, 'depoisDe')) meuObjt[acao][percursos].depoisDe(definicao.depoisDe);
+          if (_.has(definicao, 'acao')) meuObjt[acao][percurso](definicao.acao);
+          if (_.has(definicao, 'antesQue')) meuObjt[acao][percurso].antesQue(definicao.antesQue);
+          if (_.has(definicao, 'depoisDe')) meuObjt[acao][percurso].depoisDe(definicao.depoisDe);
         }
       });
     }
@@ -239,39 +242,42 @@ Fonte.prototype.usar = function(mediador) {
     mediador.configuracaoExtra(this);
   }
 };
-/*
+
+/* @Função autoAssociar(). 
+ *
+ * Carrega as fontes alvo associadas com esta fonte.
+ *
+ * @Parametro {Objeto} [fonte] Uma fonte.
+ */
 function autoAssociar(fonte) {
+  // Se não possuir associações então retorna.
   if (!fonte.modelo.associations) {
     return;
   }
   
   _.forEach(fonte.modelo.associations, function(associacao) {
-    // for prefetched data in list and read
+    // Para os dados já tragos (prefetched) em listar e em ler.
     if (!!associacao.as) {
       fonte.incluir.push({ modelo: associacao.target, como: associacao.as });
     } else {
       fonte.incluir.push(associacao.target);
     }
 
-    var subResourceName;
+    var nomeDaSubFonte;
     if (associacao.associationType === 'HasOne') {
-      subResourceName =
-        associacao.target.options.name.singular.toLowerCase();
-      fonte[subResourceName] = hasOneResource(Fonte, fonte, associacao);
+      nomeDaSubFonte = associacao.target.options.name.singular.toLowerCase();
+      fonte[nomeDaSubFonte] = possuiUmaFonte(Fonte, fonte, associacao);
     } else if (associacao.associationType === 'HasMany') {
-      subResourceName =
-        associacao.target.options.name.plural.toLowerCase();
-      fonte[subResourceName] = hasManyResource(Fonte, fonte, associacao);
+      nomeDaSubFonte = associacao.target.options.name.plural.toLowerCase();
+      // fonte[nomeDaSubFonte] = hasManyResource(Fonte, fonte, associacao);
     } else if (associacao.associationType === 'BelongsTo') {
-      subResourceName =
-        associacao.target.options.name.singular.toLowerCase();
-      fonte[subResourceName] = belongsToResource(Fonte, fonte, associacao);
+      nomeDaSubFonte = associacao.target.options.name.singular.toLowerCase();
+      // fonte[nomeDaSubFonte] = belongsToResource(Fonte, fonte, associacao);
     } else if (associacao.associationType === 'BelongsToMany') {
-     subResourceName =
-       associacao.target.options.name.plural.toLowerCase();
-     fonte[subResourceName] = belongsToManyResource(Fonte, fonte, associacao);
+     nomeDaSubFonte = associacao.target.options.name.plural.toLowerCase();
+      // fonte[nomeDaSubFonte] = belongsToManyResource(Fonte, fonte, associacao);
     }
   });
 }
-*/
+
 module.exports = Fonte;

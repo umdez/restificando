@@ -7,7 +7,7 @@
  * 
  * $Id base.js, criado em 07/07/2016 às 12:37 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versão atual 0.0.2-Beta
  */
 
 var _ = require('lodash');
@@ -20,17 +20,17 @@ var erros = require('../Erros');
  *
  * Nossos controladores estão listados abaixo:
  *
- * fonte.criar     POST /fonte                  (Requisita a criação de um registro para esta fonte)                (Create)
- * fonte.listar    GET /fonte                   (Requisita uma lista de registros desta fonte)                      (List)
- * fonte.ler       GET /fonte/:identificador    (Requisita um unico registro desta fonte passando um identificador) (Read)
- * fonte.atualizar PUT /fonte/:identificador    (Requisita a atualização de um registro desta fonte)                (Update)
- * fonte.deletar   DELETE /fonte/:identificador (Requisita a remoção de um registro desta fonte)                    (Delete)
+ * fonte.criar     POST /fonte                          (Requisita a criação de um registro para esta fonte)                (Create)
+ * fonte.listar    GET /fonte                           (Requisita uma lista de registros desta fonte)                      (List)
+ * fonte.ler       GET /fonte/:identificador            (Requisita um unico registro desta fonte passando um identificador) (Read)
+ * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)                (Update)
+ * fonte.deletar   DELETE /fonte/:identificador         (Requisita a remoção de um registro desta fonte)                    (Delete)
  * 
- * @Objeto {args} As configurações do nosso controlador.
+ * @Parametro {Objeto} [args] As configurações do nosso controlador.
  *  - args.estagioFinal (Obrigatório) O estágio final com seus atributos. 
  *  - args.aplicativo (Obrigatório) O aplicativo Express.
  *  - args.modelo (Obrigatório) O modelo da fonte.
- *  - args.incluir (Opcional) Mais modelos inclusos.
+ *  - args.incluir (Opcional) Mais modelos inclusos. Para realizar um JOIN.
  *  - args.fonte (Obrigatório) A fonte.
  ----------------------------------------------------------------------------------------*/
 var Controlador = function(args) {
@@ -59,30 +59,22 @@ Controlador.prototype.inicializar = function(opcoes) {
     this.incluirEstesAtributos = incluirEstesAtributos;
   }
 
-  this.rota();
+  this.roteador();
 };
 
-/* @Propriedade {Matriz} [percursos] Contêm os nossos percursos básicos.
- *
- * fonte.controlador.iniciar    (Chamado no inicio da requisição)                            (Start) 
- * fonte.controlador.autenticar (Utilizado para autenticação e ou autorização da requisição) (Auth)
- * fonte.controlador.trazer     (Traz dados da Database)                                     (Fetch)
- * fonte.controlador.dados      (Fazer alguma transformação nos dados da Database)           (Data)
- * fonte.controlador.escrever   (Escrever para a Database)                                   (Write)
- * fonte.controlador.enviar     (Envia uma resposta para o usuário)                          (Send)
- * fonte.controlador.completar  (Chamado quando a requisição já estiver completa)            (Complete)
+/* @Propriedade {Matriz} [percursos] Contêm os nossos percursos básicos para cada controlador.
  */
 Controlador.percursos = [
-  'iniciar',     // Start 
-  'autenticar',  // Auth 
-  'trazer',      // Fetch 
-  'dados',       // Data 
-  'escrever',    // Write 
-  'enviar',      // Send 
-  'completar'    // Complete 
+  'iniciar',    // fonte.controlador.iniciar    (Start)    (Chamado no inicio da requisição).                            
+  'autenticar', // fonte.controlador.autenticar (Auth)     (Utilizado para autenticação e ou autorização da requisição). 
+  'trazer',     // fonte.controlador.trazer     (Fetch)    (Traz dados da Database).                                     
+  'dados',      // fonte.controlador.dados      (Data)     (Fazer alguma transformação nos dados da Database).            
+  'escrever',   // fonte.controlador.escrever   (Write)    (Escrever para a Database).                                    
+  'enviar',     // fonte.controlador.enviar     (Send)     (Envia uma resposta para o usuário).                           
+  'completar'   // fonte.controlador.completar  (Complete) (Chamado quando a requisição já estiver completa).             
 ];
 
-/* Retorna ganchos para cada percurso. Por exemplo, para o percurso 'iniciar', teremos:
+/* @Propriedade {Matriz} [ganchos] Retorna ganchos para cada percurso. Por exemplo, para o percurso 'iniciar', teremos:
  * 'iniciar_antesQue', 'iniciar' e também 'iniciar_depoisDe'. 
  */
 Controlador.ganchos = Controlador.percursos.reduce(function(ganchos, percurso) {
@@ -103,10 +95,10 @@ Controlador.prototype.erro = function(req, res, erro) {
 
 Controlador.prototype.enviar = function(req, res, contexto) {
   res.json(contexto.instancia);
-  return contexto.continue;
+  return contexto.continuar;
 };
 
-Controlador.prototype.rota = function() {
+Controlador.prototype.roteador = function() {
   var aplicativo = this.aplicativo;
   var estagioFinal = this.estagioFinal;
   var meuObjt = this;
@@ -127,74 +119,74 @@ Controlador.prototype._controle = function(req, res) {
   };
 
   Controlador.percursos.forEach(function(percurso) {
-    // Se já houver este percurso então retornamos aqui.
+    // Se não houver este percurso então retornamos aqui.
     if (!meuObjt[percurso]) {
       return;
     }
     
     [percurso + '_antesQue', percurso, percurso + '_depoisDe'].forEach(function(gancho) {
-      // Se já houver este gancho então retornamos aqui.
+      // Se não houver este gancho então retornamos aqui.
       if (!meuObjt[gancho]) {
         return;
       }
       
-      cadeiaDeGanchos = cadeiaDeGanchos.then(function executarUmGancho(skip) {
-        if (skip) return true;
+      cadeiaDeGanchos = cadeiaDeGanchos.then(function executarUmGancho(pular) {
+        if (pular) return true;
 
-        var functions = Array.isArray(meuObjt[gancho]) ? meuObjt[gancho] : [meuObjt[gancho]];
+        var funcoes = Array.isArray(meuObjt[gancho]) ? meuObjt[gancho] : [meuObjt[gancho]];
 
-        // return the function chain. This means if the function chain resolved
-        // to skip then all the remaining hooks on this percurso will also be
-        // skipped and we will go to the next percurso
-        return functions.reduce(function(prev, current) {
-          return prev.then(function runHookFunction(skipNext) {
+        /* Retorna uma cadeia de funções. Isso significa que se a cadeia de funções deliberar
+         * no sentido de pular, então todos os ganchos neste percurso irão também ser pulados
+         * e então nós iremos ir para o próximo percurso. */
+        return funcoes.reduce(function(anterior, atual) {
+          return anterior.then(function funcaoParaExecutarUmGancho(puleParaProxima) {
 
-            // if any asked to skip keep returning true to avoid calling further
-            // functions inside this gancho
-            if (skipNext) return true;
+            // Se qualquer uma pedir para pular então mantenha retornando true 
+            // para precaver de chamar mais funções dentro deste gancho.
+            if (puleParaProxima) return true;
 
-            var decisionPromise = new Promessa(function(resolve) {
+            var decisaoDaPromessa = new Promessa(function(deliberar) {
               _.assign(contexto, {
-                skip: function() {
-                  resolve(contexto.skip);
+                pular: function() {
+                  deliberar(contexto.pular);
                 },
-                stop: function() {
-                  resolve(new erros.RequestCompleted());
+                parar: function() {
+                  deliberar(new erros.RequisicaoCompleta());
                 },
-                continue: function() {
-                  resolve(contexto.continue);
+                continuar: function() {
+                  deliberar(contexto.continuar);
                 },
-                error: function(status, message, listaDeErros, cause) {
-                  // if the second parameter is undefined then we are being
-                  // passed an error to rethrow, otherwise build an EpilogueError
-                  if (_.isUndefined(message) || status instanceof erros.EpilogueError) {
-                    resolve(status);
+                erro: function(estatos, mensagem, listaDeErros, causa) {
+                  // Se o segundo parametro é indefinido então nós vamos passar um erro
+                  // para ser lançado denovo (rethrow), caso contrário nós criamos um RestificandoErro
+                  if (_.isUndefined(mensagem) || estatos instanceof erros.RestificandoErro) {
+                    deliberar(estatos);
                   } else {
-                    resolve(new erros.EpilogueError(status, message, listaDeErros, cause));
+                    deliberar(new erros.RestificandoErro(estatos, mensagem, listaDeErros, causa));
                   }
                 }
               });
             });
 
-            return Promessa.resolve(current.call(meuObjt, req, res, contexto))
-              .then(function(result) {
-                // if they were returned directly or as a result of a promise
-                if (_.includes([contexto.skip, contexto.continue, contexto.stop], result)) {
-                  // call it to resolve the decision
-                  result();
+            return Promessa.resolve(atual.call(meuObjt, req, res, contexto))
+              .then(function(resultado) {
+                // Se caso eles forem retornados diretamente ou como um resultado de uma promessa.
+                if (_.includes([contexto.pular, contexto.continuar, contexto.parar], resultado)) {
+                  // Chama isso para deliberar a decisão.
+                  resultado();
                 }
 
-                return decisionPromise.then(function(decision) {
-                  if (decision === contexto.continue) return false;
-                  if (decision === contexto.skip) return true;
+                return decisaoDaPromessa.then(function(decisao) {
+                  if (decisao === contexto.continuar) return false;
+                  if (decisao === contexto.pular) return true;
 
-                  // must be an error/contexto.stop, throw the decision for error handling
+                  // Deve ser um erro/contexto.parar, lançamos a decisão para suporte a erro (error handling)
                   if (process.domain) {
                     // restify wraps the server in domain and sets error handlers that get in the way of mocha
                     // https://github.com/dchester/epilogue/issues/83
-                    return Promessa.reject(decision);
+                    return Promessa.reject(decisao);
                   }
-                  throw decision;
+                  throw decisao;
                 });
               });
           });
@@ -203,8 +195,8 @@ Controlador.prototype._controle = function(req, res) {
     });
 
     cadeiaDeGanchos = cadeiaDeGanchos.then(function() {
-      // clear any passed results so the next percurso will run even if a
-      // _after said to skip
+      // Limpa qualquer resultado passado para que o próximo percurso vá 
+      // executar mesmo se um _depoisDe falou para pular.
       return false;
     });
   });
@@ -212,12 +204,13 @@ Controlador.prototype._controle = function(req, res) {
   cadeiaDeGanchos
     .catch(erros.RequisicaoCompleta, _.noop)
     .catch(meuObjt.modelo.sequelize.ValidationError, function(erro) {
-      var listaDeErros = _.reduce(erro.errors, function(resultado, erro) {
-        resultado.push({ field: erro.path, message: erro.message });
+      var listaDeErros = _.reduce(erro.erros, function(resultado, erro) {
+        // <umdez> Será que isto aqui está certo?
+        resultado.push({ field: erro.path, mensagem: erro.mensagem });
         return resultado;
       }, []);
 
-      meuObjt.erro(req, res, new erros.ErroDeRequisicaoRuim(erro.message, listaDeErros, erro));
+      meuObjt.erro(req, res, new erros.ErroDeRequisicaoRuim(erro.mensagem, listaDeErros, erro));
     })
     .catch(erros.RestificandoErro, function(erro) {
       meuObjt.erro(req, res, erro);
@@ -228,17 +221,17 @@ Controlador.prototype._controle = function(req, res) {
     });
 };
 
-Controlador.prototype.percurso = function(name, callback) {
-  if (!_.includes(Controlador.ganchos, name))
-    throw new Error('invalid percurso: ' + name);
+Controlador.prototype.percurso = function(nome, cd) {
+  if (!_.includes(Controlador.ganchos, nome))
+    throw new Error('Percurso invalido: ' + nome);
 
-  if (!this[name]) {
-    this[name] = [];
-  } else if (!Array.isArray(this[name])) {
-    this[name] = [ this[name] ];
+  if (!this[nome]) {
+    this[nome] = [];
+  } else if (!Array.isArray(this[nome])) {
+    this[nome] = [ this[nome] ];
   }
 
-  this[name].push(callback);
+  this[nome].push(cd);
 };
 
 module.exports = Controlador;

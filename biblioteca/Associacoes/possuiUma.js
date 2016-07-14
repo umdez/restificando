@@ -7,7 +7,7 @@
  * 
  * $Id possuiUma.js, criado em 31/05/2016 às 18:40 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versão atual 0.0.2-Beta
  */
 
 /* Exporta uma função para realizar o tipo de associação one-to-one. Nesse tipo de associação, os dois modelos
@@ -20,22 +20,22 @@
  * extrangeira existe no modelo alvo.
  *
  * @Parametro {Objeto} [Fonte] Contêm objeto com atributos e métodos para uma fonte.
- * @Parametro {Objeto} [fonte] 
- * @Parametro {Objeto} [associacao] 
+ * @Parametro {Objeto} [fonte] A fonte de onde iremos criar uma fonte associada a partir de seu alvo.
+ * @Parametro {Objeto} [associacao] É uma associação que pertence a fonte.
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
-  var subNomeDaFonte = associacao.alvo.opcoes.nome.singular.toLowerCase();
+  var nomeDaSubFonte = associacao.target.options.name.singular.toLowerCase();
 
   var fonteAssociada = new Fonte({
     aplicativo: fonte.aplicativo,
     sequelize: fonte.sequelize,
-    modelo: associacao.alvo,
-    estagiosFinais: [fonte.estagiosFinais.plural + '/:' + associacao.identificadorDeCampo + '/' + subNomeDaFonte],
+    modelo: associacao.target,
+    estagiosFinais: [fonte.estagiosFinais.plural + '/:' + associacao.identifierField + '/' + nomeDaSubFonte],
     acoes: ['ler']
   });
 
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
-  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identificadorDeCampo ];
+  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identifierField ];
   return fonteAssociada;
 };

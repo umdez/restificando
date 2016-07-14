@@ -7,7 +7,7 @@
  * 
  * $Id EstagioFinal.js, criado em 31/05/2016 às 18:24 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versão atual 0.0.2-Beta
  */
 
 /* @Objeto EstagioFinal(). 
@@ -15,11 +15,11 @@
  * as rotas associadas a um determinado modelo. Por exemplo, imagine o modelo 'usuarios', ele
  * terá os seguintes estágios finais que estão listados abaixo:
  *
- * POST /usuarios                  (Cria um registro de usuário)                                  (Create)
- * GET /usuarios                   (Pega uma lista de registros de usuarios)                      (List)
- * GET /usuarios/:identificador    (Pega um unico registro de usuarios passando um identificador) (Read)
- * PUT /usuarios/:identificador    (Atualização de um registro de usuários)                       (Update)
- * DELETE /usuarios/:identificador (Apaga um registro dos usuários)                               (Delete)
+ * POST /usuarios                          (Cria um registro de usuário)                                  (Create)
+ * GET /usuarios                           (Pega uma lista de registros de usuarios)                      (List)
+ * GET /usuarios/:identificador            (Pega um unico registro de usuarios passando um identificador) (Read)
+ * PUT|POST|PATCH /usuarios/:identificador (Atualização de um registro de usuários)                       (Update)
+ * DELETE /usuarios/:identificador         (Apaga um registro dos usuários)                               (Delete)
  *
  * @Parametro {Texto} [estagioFinal] Contêm um estágio final e seus atributos.
  ----------------------------------------------------------------------------------------*/

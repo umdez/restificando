@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = {
-  //read: require('./read.js'),
+  ler: require('./ler.js'),
   //list: require('./list.js'),
   //create: require('./create.js'),
   //update: require('./update.js'),
-  //delete: require('./delete.js'),
+  deletar: require('./deletar.js'),
   base: require('./base.js')
 };
