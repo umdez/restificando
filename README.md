@@ -7,3 +7,7 @@ Um serviço **CRUD** é um acrônimo de **Create**, **Read**, **Update** e **Del
 - [O que são os controladores?](https://github.com/umdez/restificando/blob/master/docs/controladores.md)
 - [O que são os Percursos?](https://github.com/umdez/restificando/blob/master/docs/percursos.md)
 - [O que são os estágios?](https://github.com/umdez/restificando/blob/master/docs/estagios.md)
+- [O que são os ganchos?]()
+
+# Créditos
+Todos os contribuidores do projeto [Epilogue](https://github.com/dchester/epilogue#readme). Porque ele foi uma fonte de inspiração. 
