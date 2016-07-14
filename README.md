@@ -10,4 +10,4 @@ Um serviço **CRUD** é um acrônimo de **Create**, **Read**, **Update** e **Del
 - [O que são os ganchos?]()
 
 # Créditos
-Todos os contribuidores do projeto [Epilogue](https://github.com/dchester/epilogue#readme). Ele foi uma fonte de inspiração. 
+Todos os contribuidores do projeto [Epilogue](https://github.com/dchester/epilogue#readme). Porque ele foi uma fonte de inspiração. 
