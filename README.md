@@ -9,4 +9,4 @@ Um serviço **CRUD** é um acrônimo de **Create**, **Read**, **Update** e **Del
 - [O que são os estágios?](https://github.com/umdez/restificando/blob/master/docs/estagios.md)
 
 # Créditos
-Este projeto utilizou o [Epilogue](https://github.com/dchester/epilogue#readme) como fonte de inspiração. 
+Todos os contribuidores do projeto [Epilogue](https://github.com/dchester/epilogue#readme). Ele foi uma fonte de inspiração. 
