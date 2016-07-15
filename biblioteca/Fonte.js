@@ -220,7 +220,7 @@ var Fonte = function(opcoes) {
 };
 
 Fonte.prototype.usar = function(mediador) {
-  var meuObjt = this,
+  var meuObjt = this;
   var acoes = _.clone(meuObjt.acoes);
 
   acoes.push('todos');
