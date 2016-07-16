@@ -10,29 +10,29 @@
  * Versão atual 0.0.2-Beta
  */
 
-var util = require('util'),
-    Base = require('./base'),
-    ReadController = require('./read');
+var utilitario = require('util');
+var Base = require('./base');
+var ControladorDeLeitura = require('./ler');
 
-var Delete = function(args) {
-  Delete.super_.call(this, args);
+var Deletar = function(args) {
+  Deletar.super_.call(this, args);
 };
 
-util.inherits(Delete, Base);
+utilitario.inherits(Deletar, Base);
 
-Delete.prototype.action = 'delete';
-Delete.prototype.method = 'delete';
-Delete.prototype.plurality = 'singular';
+Deletar.prototype.acao = 'deletar';
+Deletar.prototype.metodo = 'delete';
+Deletar.prototype.plurality = 'singular';
 
-Delete.prototype.fetch = ReadController.prototype.fetch;
+Deletar.prototype.trazer = ControladorDeLeitura.prototype.trazer;
 
-Delete.prototype.write = function(req, res, context) {
-  return context.instance
+Deletar.prototype.escrever = function(req, res, contexto) {
+  return contexto.instancia
     .destroy()
     .then(function() {
-      context.instance = {};
-      return context.continue;
+      contexto.instancia = {};
+      return contexto.continuar;
     });
 };
 
-module.exports = Delete;
+module.exports = Deletar;

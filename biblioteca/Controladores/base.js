@@ -124,6 +124,7 @@ Controlador.prototype._controle = function(req, res) {
       return;
     }
     
+    // Para cada um dos percursos temos os ganchos.
     [percurso + '_antesQue', percurso, percurso + '_depoisDe'].forEach(function(gancho) {
       // Se não houver este gancho então retornamos aqui.
       if (!meuObjt[gancho]) {
@@ -206,7 +207,7 @@ Controlador.prototype._controle = function(req, res) {
     .catch(meuObjt.modelo.sequelize.ValidationError, function(erro) {
       var listaDeErros = _.reduce(erro.erros, function(resultado, erro) {
         // <umdez> Será que isto aqui está certo?
-        resultado.push({ field: erro.path, mensagem: erro.mensagem });
+        resultado.push({ campo: erro.path, mensagem: erro.message });
         return resultado;
       }, []);
 
