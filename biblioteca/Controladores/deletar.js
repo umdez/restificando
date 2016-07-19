@@ -22,7 +22,7 @@ utilitario.inherits(Deletar, Base);
 
 Deletar.prototype.acao = 'deletar';
 Deletar.prototype.metodo = 'delete';
-Deletar.prototype.plurality = 'singular';
+Deletar.prototype.pluralidade = 'singular';
 
 Deletar.prototype.trazer = ControladorDeLeitura.prototype.trazer;
 
