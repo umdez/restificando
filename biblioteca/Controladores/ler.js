@@ -30,7 +30,7 @@ Ler.prototype.trazer = function(req, res, contexto) {
   var opcoes = contexto.opcoes || {};
   var criterio = contexto.criterio || {};
   var incluir = this.incluir;
-  var incluirEstesAtributos = this.incluirEstesAtributos || [];
+  var incluirAtributos = this.incluirAtributos || [];
 
   // Somente olhar os atributos que nós importam.
   opcoes.atributos = opcoes.atributos || this.fonte.atributos;
@@ -54,7 +54,7 @@ Ler.prototype.trazer = function(req, res, contexto) {
   if (incluir.length) opcoes.incluir = incluir;
   if (this.fonte.opcoesDeAssociacao.removerChaveEstrangeira) {
     opcoes.atributos = opcoes.atributos.filter(function(atrib) {
-      return incluirEstesAtributos.indexOf(atrib) === -1;
+      return incluirAtributos.indexOf(atrib) === -1;
     });
   }
 
