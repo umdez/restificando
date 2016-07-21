@@ -58,6 +58,8 @@ Ler.prototype.trazer = function(req, res, contexto) {
     });
   }
 
+  opcoes.attributes = opcoes.atributos;
+  
   return modelo.find(opcoes).then(function(instancia) {
     if (!instancia) {
       throw new erros.ErroDeNaoEncontrado();
