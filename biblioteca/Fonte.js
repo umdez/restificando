@@ -200,7 +200,7 @@ var Fonte = function(opcoes) {
   });
 
   // Uma copia de provisão dos dados associados para uso posterior 
-  meuObjt.InformacoesDasAssociacoes = {};
+  meuObjt.informacoesDasAssociacoes = {};
   if (meuObjt.incluir && meuObjt.incluir.length) {
     meuObjt.incluir.forEach(function(i) {
       var chavePrimaria = i.modelo.primaryKeyField;
@@ -209,7 +209,7 @@ var Fonte = function(opcoes) {
       });
 
       associacoes.forEach(function(associacao) {
-        meuObjt.InformacoesDasAssociacoes[associacao.identifier] = {
+        meuObjt.informacoesDasAssociacoes[associacao.identifier] = {
           identificador: associacao.identifier,
           chavePrimaria: chavePrimaria,
           como: associacao.as
