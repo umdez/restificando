@@ -22,32 +22,32 @@
  * chave extrangeira da fonte ficará no(s) modelo(s) alvos.
  *
  * @Parametro {Objeto} [Fonte] Contêm objeto com atributos e métodos para uma fonte.
- * @Parametro {Objeto} [fonte] 
- * @Parametro {Objeto} [associacao] 
+ * @Parametro {Objeto} [fonte] A fonte de onde iremos criar uma fonte associada a partir de seu alvo.
+ * @Parametro {Objeto} [associacao] É uma associação que pertence a fonte.
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos estágios
-  var subNomeDaFonte = associacao.alvo.opcoes.nome.plural.toLowerCase();
+  var subNomeDaFonte = associacao.target.options.name.plural.toLowerCase();
   
   var fonteAssociada = new Fonte({
     aplicativo: fonte.aplicativo,
     sequelize: fonte.sequelize,
-    modelo: associacao.alvo,
+    modelo: associacao.target,
     estagiosFinais: [
-      fonte.estagiosFinais.plural + '/:' + associacao.identificadorDeCampo + '/' + subNomeDaFonte,
-      fonte.estagiosFinais.plural + '/:' + associacao.identificadorDeCampo + '/' + subNomeDaFonte + '/:id'
+      fonte.estagiosFinais.plural + '/:' + associacao.identifierField + '/' + subNomeDaFonte,
+      fonte.estagiosFinais.plural + '/:' + associacao.identifierField + '/' + subNomeDaFonte + '/:id'
     ],
     acoes: ['ler', 'listar']
   });
 
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
-  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identificadorDeCampo ];
-  fonteAssociada.controladores.listar.incluirAtributos = [ associacao.identificadorDeCampo ];
+  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identifierField ];
+  fonteAssociada.controladores.listar.incluirAtributos = [ associacao.identifierField ];
 
   fonteAssociada.listar.trazer.antesQue(function(requisicao, resposta, contexto) {
-    // Filtro
+    // Filtramos
     contexto.criterio = contexto.criterio || {};
-    contexto.criterio[associacao.identificadorDeCampo] = requisicao.params[associacao.identificadorDeCampo];
+    contexto.criterio[associacao.identifierField] = requisicao.params[associacao.identifierField];
     contexto.continue();
   });
 
