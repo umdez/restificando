@@ -58,7 +58,9 @@ Ler.prototype.trazer = function(req, res, contexto) {
     });
   }
 
-  opcoes.attributes = opcoes.atributos;
+  if (Object.keys(opcoes.atributos).length) {
+    opcoes.attributes = opcoes.atributos; 
+  }
   
   return modelo.find(opcoes).then(function(instancia) {
     if (!instancia) {
