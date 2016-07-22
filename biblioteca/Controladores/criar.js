@@ -35,13 +35,8 @@ Criar.prototype.escrever = function(req, res, contexto) {
         var atrib = contexto.atributos[associacao.as];
 
         if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.primaryKey)) {
-          
           contexto.atributos[associacao.identifier] = atrib[associacao.primaryKey];
-          
-          console.log(contexto.atributos[associacao.identifier] );
-          console.log(atrib[associacao.primaryKey] );
-          
-          delete contexto.atributos[associacao.as];
+          //delete contexto.atributos[associacao.as];
         }
       }
     });
@@ -55,7 +50,6 @@ Criar.prototype.escrever = function(req, res, contexto) {
         var localizacao = estagioFinal.replace(/:(\w+)/g, function(encontrado, $1) {
           return instancia[$1];
         });
-
         res.header('Location', localizacao);
       }
 
