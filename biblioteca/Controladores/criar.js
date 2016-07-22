@@ -25,7 +25,7 @@ Criar.prototype.metodo = 'post';
 Criar.prototype.pluralidade = 'plural';
 
 Criar.prototype.escrever = function(req, res, contexto) {
-  contexto.atributos = _.extend(contexto.attributes, req.body);
+  contexto.atributos = _.extend(contexto.atributos, req.body);
   var meuObjt = this;
 
   // Verifica dados associados
@@ -34,6 +34,7 @@ Criar.prototype.escrever = function(req, res, contexto) {
       if (contexto.atributos.hasOwnProperty(associacao.as)) {
         var atrib = contexto.atributos[associacao.as];
 
+        console.log(atrib);
         if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.primaryKey)) {
           contexto.atributos[associacao.identifier] = atrib[associacao.primaryKey];
           delete contexto.atributos[associacao.as];
