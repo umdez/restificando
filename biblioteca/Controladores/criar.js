@@ -36,9 +36,11 @@ Criar.prototype.escrever = function(req, res, contexto) {
 
         if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.primaryKey)) {
           
-          console.log(atrib);
-          
           contexto.atributos[associacao.identifier] = atrib[associacao.primaryKey];
+          
+          console.log(contexto.atributos[associacao.identifier] );
+          console.log(atrib[associacao.primaryKey] );
+          
           delete contexto.atributos[associacao.as];
         }
       }
