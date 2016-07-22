@@ -33,7 +33,7 @@ Ler.prototype.trazer = function(req, res, contexto) {
   var incluirAtributos = this.incluirAtributos || [];
 
   // Somente olhar os atributos que nós importam.
-  opcoes.atributos = opcoes.atributos || this.fonte.atributos;
+  opcoes.attributes = opcoes.atributos = opcoes.atributos || this.fonte.atributos;
 
   // Remove os parametros que estão já inclusos nos criterios.
   Object.keys(criterio).forEach(function(atrib) { delete req.params[atrib]; });
@@ -51,15 +51,14 @@ Ler.prototype.trazer = function(req, res, contexto) {
     incluir = incluir.concat(contexto.incluir);
   }
 
-  if (incluir.length) opcoes.incluir = incluir;
+  if (incluir.length) { 
+    opcoes.include = opcoes.incluir = incluir;
+  }
+  
   if (this.fonte.opcoesDeAssociacao.removerChaveEstrangeira) {
-    opcoes.atributos = opcoes.atributos.filter(function(atrib) {
+    opcoes.attributes = opcoes.atributos = opcoes.atributos.filter(function(atrib) {
       return incluirAtributos.indexOf(atrib) === -1;
     });
-  }
-
-  if (Object.keys(opcoes.atributos).length) {
-    opcoes.attributes = opcoes.atributos; 
   }
   
   return modelo.find(opcoes).then(function(instancia) {

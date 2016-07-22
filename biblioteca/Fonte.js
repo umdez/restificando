@@ -203,9 +203,9 @@ var Fonte = function(opcoes) {
   meuObjt.informacoesDasAssociacoes = {};
   if (meuObjt.incluir && meuObjt.incluir.length) {
     meuObjt.incluir.forEach(function(i) {
-      var chavePrimaria = i.modelo.primaryKeyField;
+      var chavePrimaria = i.model.primaryKeyField;
       var associacoes = _.values(meuObjt.modelo.associations).filter(function(a) {
-        return a.target === i.modelo;
+        return a.target === i.model;
       });
 
       associacoes.forEach(function(associacao) {

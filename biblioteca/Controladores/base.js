@@ -49,7 +49,7 @@ Controlador.prototype.inicializar = function(opcoes) {
     var incluirEstesAtributos = [];
     var incluirEstesModelos = [];
     opcoes.incluir.forEach(function(incluir) {
-      incluirEstesModelos.push(!!incluir.modelo ? incluir.modelo : incluir);
+      incluirEstesModelos.push(!!incluir.model ? incluir.model : incluir);
     });
 
     _.forEach(this.modelo.associations, function(associacao) {
