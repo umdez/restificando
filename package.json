@@ -8,10 +8,7 @@
   },
   "main": "biblioteca/inicio.js",
   "scripts": {
-    "jshint": "jshint ./biblioteca ./testes",
-    "mocha": "mocha --check-leaks -R spec -u exports testes/*.teste.js testes/**/*.teste.js",
-    "coverage": "istanbul cover node_modules/.bin/_mocha -- -- testes/*.teste.js testes/**/*.teste.js",
-    "test": "npm run-script jshint && npm run-script mocha"
+    
   },
   "repository": {
     "type": "git",
@@ -37,15 +34,7 @@
     "lodash": "^3.10.1"
   },
   "devDependencies": {
-    "body-parser": "^1.13.3",
-    "chai": "^3.2.0",
-    "express": "^4.13.3",
-    "istanbul": "^0.4.0",
-    "jshint": "^2.8.0",
-    "mocha": "^2.2.5",
-    "request": "^2.60.0",
-    "sequelize": "^3.5.1",
-    "sqlite3": "^3.0.9"
+    
   },
   "homepage": "https://github.com/umdez/restificando#readme",
   "maintainers": [
