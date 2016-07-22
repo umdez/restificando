@@ -42,7 +42,6 @@ Criar.prototype.escrever = function(req, res, contexto) {
     });
   }
 
-  console.log(contexto.atributos);
   return this.modelo
     .create(contexto.atributos)
     .then(function(instancia) {
