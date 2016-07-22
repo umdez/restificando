@@ -25,7 +25,7 @@ Criar.prototype.metodo = 'post';
 Criar.prototype.pluralidade = 'plural';
 
 Criar.prototype.escrever = function(req, res, contexto) {
-  contexto.atributos = _.extend(contexto.atributos, req.body);
+  contexto.atributos = _.extend(contexto.attributes, req.body);
   var meuObjt = this;
 
   // Verifica dados associados
