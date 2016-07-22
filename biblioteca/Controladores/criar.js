@@ -10,9 +10,9 @@
  * Versão atual 0.0.2-Beta
  */
 
-var _ = require('lodash'),
-    utilitario = require('util'),
-    Base = require('./base');
+var _ = require('lodash');
+var utilitario = require('util');
+var Base = require('./base');
 
 var Criar = function(args) {
   Criar.super_.call(this, args);
@@ -31,12 +31,12 @@ Criar.prototype.escrever = function(req, res, contexto) {
   // Verifica dados associados
   if (this.incluir && this.incluir.length) {
     _.values(meuObjt.fonte.informacoesDasAssociacoes).forEach(function(associacao) {
-      if (contexto.atributos.hasOwnProperty(associacao.como)) {
-        var atrib = contexto.atributos[associacao.como];
+      if (contexto.atributos.hasOwnProperty(associacao.as)) {
+        var atrib = contexto.atributos[associacao.as];
 
-        if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.chavePrimaria)) {
-          contexto.atributos[associacao.identificador] = atrib[associacao.chavePrimaria];
-          delete contexto.atributos[associacao.como];
+        if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.primaryKey)) {
+          contexto.atributos[associacao.identifier] = atrib[associacao.primaryKey];
+          delete contexto.atributos[associacao.as];
         }
       }
     });
@@ -47,7 +47,7 @@ Criar.prototype.escrever = function(req, res, contexto) {
     .then(function(instancia) {
       if (meuObjt.fonte) {
         var estagioFinal = meuObjt.fonte.estagiosFinais.singular;
-        var localizacao = estagioFinal.replace(/:(\w+)/g, function(match, $1) {
+        var localizacao = estagioFinal.replace(/:(\w+)/g, function(encontrado, $1) {
           return instancia[$1];
         });
 
@@ -57,12 +57,12 @@ Criar.prototype.escrever = function(req, res, contexto) {
       if (meuObjt.fonte.seRecarregarInstancias === true) {
         var opcoesDeRecarga = {};
         if (Array.isArray(meuObjt.incluir) && meuObjt.incluir.length) {
-          //opcoesDeRecarga.incluir = meuObjt.incluir;
+          opcoesDeRecarga.include = meuObjt.incluir;
         }
         if (!!meuObjt.fonte.excluirAtributos) {
-          //opcoesDeRecarga.atributos = { exclude: meuObjt.fonte.excluirAtributos };
+          opcoesDeRecarga.attributes = { exclude: meuObjt.fonte.excluirAtributos };
         }
-        //return instancia.reload(opcoesDeRecarga);
+        return instancia.reload(opcoesDeRecarga);
       }
 
       return instancia;

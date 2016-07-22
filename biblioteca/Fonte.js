@@ -210,9 +210,9 @@ var Fonte = function(opcoes) {
 
       associacoes.forEach(function(associacao) {
         meuObjt.informacoesDasAssociacoes[associacao.identifier] = {
-          identificador: associacao.identifier,
-          chavePrimaria: chavePrimaria,
-          como: associacao.as
+          identifier: associacao.identifier,
+          primaryKey: chavePrimaria,
+          as: associacao.as
         };
       });
     });
@@ -258,7 +258,7 @@ function autoAssociar(fonte) {
   _.forEach(fonte.modelo.associations, function(associacao) {
     // Para os dados já tragos (prefetched) em listar e em ler.
     if (!!associacao.as) {
-      fonte.incluir.push({ modelo: associacao.target, como: associacao.as });
+      fonte.incluir.push({ model: associacao.target, as: associacao.as });
     } else {
       fonte.incluir.push(associacao.target);
     }
