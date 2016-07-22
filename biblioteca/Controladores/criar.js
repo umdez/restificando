@@ -36,12 +36,13 @@ Criar.prototype.escrever = function(req, res, contexto) {
 
         if (_.isObject(atrib) && atrib.hasOwnProperty(associacao.primaryKey)) {
           contexto.atributos[associacao.identifier] = atrib[associacao.primaryKey];
-          //delete contexto.atributos[associacao.as];
+          delete contexto.atributos[associacao.as];
         }
       }
     });
   }
 
+  console.log(contexto.atributos);
   return this.modelo
     .create(contexto.atributos)
     .then(function(instancia) {
