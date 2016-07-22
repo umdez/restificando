@@ -91,7 +91,7 @@ var Fonte = function(opcoes) {
   
   // Mais modelos para inclusão
   this.incluir = opcoes.incluir.map(function(incluir) {
-    return (incluir instanceof opcoes.sequelize.Model) ? { modelo: incluir } : incluir;
+    return (incluir instanceof opcoes.sequelize.Model) ? { model: incluir } : incluir;
   });
 
   // Caso seja informado algum atributo que será excluido
