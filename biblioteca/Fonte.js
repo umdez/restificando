@@ -64,7 +64,7 @@ var Fonte = function(opcoes) {
   _.defaults(opcoes, {
     acoes: ['criar', 'listar', 'ler', 'atualizar', 'deletar'],
     seRealizarPaginacao: true,
-    seRecarregarInstancias: false,  // <umdez> O que é isso?
+    seRecarregarInstancias: false, 
     incluir: [],
     excluirAtributos: []
   });
