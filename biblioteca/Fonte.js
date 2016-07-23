@@ -69,13 +69,16 @@ var Fonte = function(opcoes) {
     excluirAtributos: []
   });
 
-  // Nossos parametros de busca e de sorteio
+  // Nossos parametros aceitos para a busca, o sorteio e o ordenamento.
   _.defaultsDeep(opcoes, {
     busca: {
       parametro: 'busc'
     },
     sorteio: {
       parametro: 'sort'
+    },
+    ordenamento: {
+      parametro: 'ord'
     }
   });
 
@@ -123,7 +126,6 @@ var Fonte = function(opcoes) {
   this.busca = opcoes.busca;
   this.sorteio = opcoes.sorteio;
   
-  // <umdez> O que é isso?
   this.seRecarregarInstancias = opcoes.seRecarregarInstancias;
 
   this.opcoesDeAssociacao = {

@@ -1,9 +1,19 @@
 'use strict';
 
-var _ = require('lodash'),
-    utilitario = require('util'),
-    Base = require('./base'),
-    ControladorDeLeitura = require('./ler');
+/*******************************************************************
+ * Restificando é de (C) propriedade da Devowly Sistemas 2015-2016 *
+ *                 https://github.com/devowly                      *
+ *******************************************************************
+ * 
+ * $Id atualizar.js, criado em 23/07/2016 às 10:59 por Leo Felippe $
+ *
+ * Versão atual 0.0.2-Beta
+ */
+
+var _ = require('lodash');
+var utilitario = require('util');
+var Base = require('./base');
+var ControladorDeLeitura = require('./ler');
 
 var Atualizar = function(args) {
   if (args.fonte.metodoDeAtualizacao) {
