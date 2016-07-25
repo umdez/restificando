@@ -10,13 +10,13 @@ Para cada um dos **controladores** de uma **fonte** existem também os **percurs
 - fonte.controlador.enviar     (Envia uma resposta para o usuário)                          (Send)
 - fonte.controlador.completar  (Chamado quando a requisição já estiver completa)            (Complete)
  
-Nós podemos então utilizar os **percursos** acima para uma diversidade de coisas, no exemplo abaixo apresentamos uma forma de 
+Nós podemos então utilizar os **percursos** acima para uma diversidade de coisas, no exemplo abaixo nós apresentamos uma forma de 
 proibir qualquer tentativa de apagar um registro no modelo 'usuarios'
 
     // Não permitir remoção do registro do usuario
-    usuarios.delete.auth(function(req, res, contexto) {
+    usuarios.deletar.autenticar(function(req, res, contexto) {
       // Pode ser por meio de um throw
-      // throw new ForbiddenError("Não é possível deletar este usuário");
+      // throw new ErroDeProibicao("Não é possível deletar este usuário");
       // Ou pode ser retornando um erro:
       // return contexto.error(403, "Não é possível deletar este usuário");
     })
