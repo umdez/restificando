@@ -7,7 +7,7 @@ Podemos configurar cada fonte para um modelo do sequelize. Para isso temos as di
 | nome  | Texto  |  É o nome dado a tabela (modelo) no banco de dados |
 | sePossuiAssociacoes  | Boleano  | Se possui associações  |
 | seForRealizarPaginacao  | Boleano  | Caso seja necessário possuir suporte à paginação  |
-| seRecarregarInstancias | Boleano  |   |
+| seForRecarregarInstancias | Boleano  |   |
 | metodoDeAtualizacao  | Texto  | Qual será o método para atualização? put, post ou patch?  |
 | estagiosFinais | Matriz | Os estágios para o serviço REST. |
 | busca | Objeto | As configurações para busca de registros |
