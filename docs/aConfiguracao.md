@@ -6,7 +6,7 @@ Podemos configurar cada fonte para um modelo do sequelize. Para isso temos as di
 |---|---|---|
 | nome  | Texto  |  É o nome dado a tabela (modelo) no banco de dados |
 | sePossuiAssociacoes  | Boleano  | Se possui associações  |
-| seRealizarPaginacao  | Boleano  | Caso seja necessário possuir suporte à paginação  |
+| seForRealizarPaginacao  | Boleano  | Caso seja necessário possuir suporte à paginação  |
 | seRecarregarInstancias | Boleano  |   |
 | metodoDeAtualizacao  | Texto  | Qual será o método para atualização? put, post ou patch?  |
 | estagiosFinais | Matriz | Os estágios para o serviço REST. |
@@ -20,7 +20,7 @@ Para realizar a adição de uma fonte é só informar as propriedades acima para
     var fonte = {
        nome: 'umModeloDoSequelize'
     ,  sePossuiAssociacoes: true
-    ,  seRealizarPaginacao: true
+    ,  seForRealizarPaginacao: true
     ,  seRecarregarInstancias: true
     ,  metodoDeAtualizacao: 'put'
     };
