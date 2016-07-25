@@ -45,8 +45,8 @@ var _ = require('lodash');
  *
  * @Parametro {Objeto} [opcoes] As configurações da nossa fonte.
  *  - opcoes.acoes (Opcional) As ações aceitas por esta fonte. 
- *  - opcoes.seRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
- *  - opcoes.seRecarregarInstancias (Opcional) <umdez> O que é isso?
+ *  - opcoes.seForRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
+ *  - opcoes.seForRecarregarInstancias (Opcional) <umdez> O que é isso?
  *  - opcoes.incluir (Opcional) Vamos incluir mais alguns modelos?
  *  - opcoes.excluirAtributos (Opcional) Os atributos não necessários e que devem ser excluidos.
  *  - opcoes.busca.parametro (Opcional) O parametro utilizado para a busca.
@@ -63,8 +63,8 @@ var Fonte = function(opcoes) {
   // Nossas opções padrões
   _.defaults(opcoes, {
     acoes: ['criar', 'listar', 'ler', 'atualizar', 'deletar'],
-    seRealizarPaginacao: true,
-    seRecarregarInstancias: false, 
+    seForRealizarPaginacao: true,
+    seForRecarregarInstancias: false, 
     incluir: [],
     excluirAtributos: []
   });
@@ -120,13 +120,13 @@ var Fonte = function(opcoes) {
   this.metodoDeAtualizacao = opcoes.metodoDeAtualizacao;
   
   // Quer paginação?
-  this.seRealizarPaginacao = opcoes.seRealizarPaginacao;
+  this.seForRealizarPaginacao = opcoes.seForRealizarPaginacao;
   
   // Parametros de busca e sorteio.
   this.busca = opcoes.busca;
   this.sorteio = opcoes.sorteio;
   
-  this.seRecarregarInstancias = opcoes.seRecarregarInstancias;
+  this.seForRecarregarInstancias = opcoes.seForRecarregarInstancias;
 
   this.opcoesDeAssociacao = {
     removerChaveEstrangeira: false

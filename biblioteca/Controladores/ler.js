@@ -14,6 +14,13 @@ var utilitario = require('util');
 var Base = require('./base');
 var erros = require('../Erros');
 
+/* @Objeto Ler().
+ *
+ * Este é o controlador de leitura. Ele é chamado com o seguinte método GET:
+ * fonte.ler       GET /fonte/:identificador            (Requisita um unico registro desta fonte passando um identificador) (Read)
+ * 
+ * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
+ ----------------------------------------------------------------------------------------*/
 var Ler = function(args) {
   Ler.super_.call(this, args);
 };
@@ -24,6 +31,12 @@ Ler.prototype.acao = 'ler';
 Ler.prototype.metodo = 'get';
 Ler.prototype.pluralidade = 'singular';
 
+/* @Método trazer().
+ * 
+ * @Parametro {Objeto} [req] A requisição feita ao servidor Express.
+ * @Parametro {Objeto} [res] A resposta a requisição ao servidor Express.
+ * @Parametro {Objeto} [contexto] Contêm informações deste contexto.
+ */
 Ler.prototype.trazer = function(req, res, contexto) {
   var modelo = this.modelo;
   var estagioFinal = this.estagioFinal;

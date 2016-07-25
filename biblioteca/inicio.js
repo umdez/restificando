@@ -59,8 +59,8 @@ var restificando = {
 
   /* @Parametro {Objeto} [opcoes] As configurações da nossa fonte.
    *  - opcoes.acoes (Opcional) As ações aceitas por esta fonte. 
-   *  - opcoes.seRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
-   *  - opcoes.seRecarregarInstancias (Opcional)
+   *  - opcoes.seForRealizarPaginacao (Opcional) Caso seja necessário habilitar a paginação para determinada fonte.
+   *  - opcoes.seForRecarregarInstancias (Opcional)
    *  - opcoes.incluir (Opcional) Vamos incluir mais alguns modelos?
    *  - opcoes.excluirAtributos (Opcional) Os atributos não necessários e que devem ser excluidos.
    *  - opcoes.busca.parametro (Opcional) O parametro utilizado para a busca.
@@ -102,11 +102,11 @@ var restificando = {
       estagiosFinais: estagiosFinais,                         // Os estágio de determinada fonte.
       acoes: opcoes.acoes,                                    // As ações aceitas por esta fonte. 
       incluir: opcoes.incluir,                                // Vamos incluir mais alguns modelos?
-      seRealizarPaginacao: opcoes.seRealizarPaginacao,        // Caso seja necessário habilitar a paginação para determinada fonte.
+      seForRealizarPaginacao: opcoes.seForRealizarPaginacao,        // Caso seja necessário habilitar a paginação para determinada fonte.
       metodoDeAtualizacao: this.metodoDeAtualizacao,          // Qual será o método para atualização? PUT, POST ou PATCH?
       busca: opcoes.busca,                                    // O parametro utilizado para a busca.
       sorteio: opcoes.sorteio,                                // O parametro utilizado para sorteio.
-      seRecarregarInstancias: opcoes.seRecarregarInstancias,  // <umdez> Mas o que é isso?
+      seForRecarregarInstancias: opcoes.seForRecarregarInstancias,  // <umdez> Mas o que é isso?
       sePossuiAssociacoes: opcoes.sePossuiAssociacoes,        // Caso a fonte possua associações com outras fontes.
       excluirAtributos: opcoes.excluirAtributos               // Os atributos não necessários e que devem ser excluidos.
     });

@@ -14,6 +14,13 @@ var _ = require('lodash');
 var utilitario = require('util');
 var Base = require('./base');
 
+/* @Objeto Criar().
+ *
+ * Este é o controlador de criação. Ele é chamado com o seguinte método POST:
+ * fonte.criar     POST /fonte                          (Requisita a criação de um registro para esta fonte)                (Create)
+ * 
+ * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
+ ----------------------------------------------------------------------------------------*/
 var Criar = function(args) {
   Criar.super_.call(this, args);
 };
@@ -24,6 +31,12 @@ Criar.prototype.acao = 'criar';
 Criar.prototype.metodo = 'post';
 Criar.prototype.pluralidade = 'plural';
 
+/* @Método escrever().
+ * 
+ * @Parametro {Objeto} [req] A requisição feita ao servidor Express.
+ * @Parametro {Objeto} [res] A resposta a requisição ao servidor Express.
+ * @Parametro {Objeto} [contexto] Contêm informações deste contexto.
+ */
 Criar.prototype.escrever = function(req, res, contexto) {
   contexto.atributos = _.extend(contexto.atributos, req.body);
   var meuObjt = this;
@@ -53,7 +66,7 @@ Criar.prototype.escrever = function(req, res, contexto) {
         res.header('Location', localizacao);
       }
 
-      if (meuObjt.fonte.seRecarregarInstancias === true) {
+      if (meuObjt.fonte.seForRecarregarInstancias === true) {
         var opcoesDeRecarga = {};
         if (Array.isArray(meuObjt.incluir) && meuObjt.incluir.length) {
           opcoesDeRecarga.include = meuObjt.incluir;

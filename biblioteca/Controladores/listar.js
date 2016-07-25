@@ -56,7 +56,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
 
   opcoes.offset = offset;
   opcoes.limit = count;
-  if (!this.fonte.seRealizarPaginacao) {  // <umdez> Talvez mudar o nome para seForRealizarPaginacao
+  if (!this.fonte.seForRealizarPaginacao) {  // <umdez> Talvez mudar o nome para seForRealizarPaginacao
     delete opcoes.limit;
   }
   
@@ -195,7 +195,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
         });
       }
 
-      if (!!meuObjt.fonte.seRealizarPaginacao)
+      if (!!meuObjt.fonte.seForRealizarPaginacao)
         res.header('Content-Range', 'items ' + [[start, end].join('-'), result.count].join('/'));
         
         // Informamos o total de registros desta listagem.

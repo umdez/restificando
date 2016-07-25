@@ -15,6 +15,13 @@ var utilitario = require('util');
 var Base = require('./base');
 var ControladorDeLeitura = require('./ler');
 
+/* @Objeto Atualizar().
+ *
+ * Este é o controlador de atualização. Ele é chamado com o seguinte método PUT|POST|PATCH:
+ * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)                (Update)
+ * 
+ * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
+ ----------------------------------------------------------------------------------------*/
 var Atualizar = function(args) {
   if (args.fonte.metodoDeAtualizacao) {
     this.metodo = args.fonte.metodoDeAtualizacao;
@@ -30,6 +37,12 @@ Atualizar.prototype.pluralidade = 'singular';
 
 Atualizar.prototype.trazer = ControladorDeLeitura.prototype.trazer;
 
+/* @Método escrever().
+ * 
+ * @Parametro {Objeto} [req] A requisição feita ao servidor Express.
+ * @Parametro {Objeto} [res] A resposta a requisição ao servidor Express.
+ * @Parametro {Objeto} [contexto] Contêm informações deste contexto.
+ */
 Atualizar.prototype.escrever = function(req, res, contexto) {
   var instancia = contexto.instancia;
   contexto.atributos = _.extend(contexto.atributos, req.body);
@@ -59,7 +72,7 @@ Atualizar.prototype.escrever = function(req, res, contexto) {
   instancia.setAttributes(contexto.atributos);
 
   // Verifica se é necessário recarregar
-  var seForRecarregarDepois = meuObjt.fonte.seRecarregarInstancias &&
+  var seForRecarregarDepois = meuObjt.fonte.seForRecarregarInstancias &&
     Object.keys(meuObjt.fonte.informacoesDasAssociacoes).some(function(atrib) {
       return instancia._changed.hasOwnProperty(atrib);
     });

@@ -14,6 +14,13 @@ var utilitario = require('util');
 var Base = require('./base');
 var ControladorDeLeitura = require('./ler');
 
+/* @Objeto Deletar().
+ *
+ * Este é o controlador de deleção. Ele é chamado com o seguinte método DELETE:
+ * fonte.deletar   DELETE /fonte/:identificador         (Requisita a remoção de um registro desta fonte)                    (Delete)
+ * 
+ * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
+ ----------------------------------------------------------------------------------------*/
 var Deletar = function(args) {
   Deletar.super_.call(this, args);
 };
@@ -26,6 +33,12 @@ Deletar.prototype.pluralidade = 'singular';
 
 Deletar.prototype.trazer = ControladorDeLeitura.prototype.trazer;
 
+/* @Método escrever().
+ * 
+ * @Parametro {Objeto} [req] A requisição feita ao servidor Express.
+ * @Parametro {Objeto} [res] A resposta a requisição ao servidor Express.
+ * @Parametro {Objeto} [contexto] Contêm informações deste contexto.
+ */
 Deletar.prototype.escrever = function(req, res, contexto) {
   return contexto.instancia
     .destroy()
