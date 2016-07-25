@@ -2,6 +2,8 @@
 
 Um exemplo simples de como usar os controladores, os percursos e os ganchos.
 
+    var restificando = require('restificando');
+     
     // Abaixo nós informamos o controlador ler e seus percursos e ganchos. Isso fornece um ótimo controle 
     // de cada rota.
     var osMeusControladores = {
@@ -20,5 +22,16 @@ Um exemplo simples de como usar os controladores, os percursos e os ganchos.
       }
     }
     
+    // Carregamos as fontes deste determinado modelo
+    var aFonteDoRestificando = restificando.fonte({});
+    
     // Agora informaremos que iremos utilizar.
     aFonteDoRestificando.usar(osMeusControladores);
+    
+    
+    // Inicia o serviço REST Restificando.
+    restificando.inicializar({
+      aplicativo: aplicativo  // Aplicativo Express.
+    , sequelize: sequelize    // Nosso ORM Sequelize.
+    , base: ''        
+    });
