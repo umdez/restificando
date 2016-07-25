@@ -5,4 +5,4 @@
 - [O que são os Percursos?](https://github.com/umdez/restificando/blob/master/docs/percursos.md)
 - [O que são os estágios?](https://github.com/umdez/restificando/blob/master/docs/estagios.md)
 - [O que são os ganchos?]()
-- [Utilizando os Controladores, Percursos e os Ganchos]()
+- [Utilizando os Controladores, os Percursos e os Ganchos]()
