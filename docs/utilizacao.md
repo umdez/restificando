@@ -28,7 +28,6 @@ Um exemplo simples de como usar os controladores, os percursos e os ganchos.
     // Agora informaremos que iremos utilizar.
     aFonteDoRestificando.usar(osMeusControladores);
     
-    
     // Inicia o serviço REST Restificando.
     restificando.inicializar({
       aplicativo: aplicativo  // Aplicativo Express.
