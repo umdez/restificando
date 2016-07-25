@@ -19,7 +19,7 @@ Um exemplo de como fazer para continuar a execução:
     })
     
     // Para fazer parar a execução no percurso de autenticação
-    fonte.deletar.autenticar(function(req, res, contexto) {
+    fonte.deletar.autenticar.acao(function(req, res, contexto) {
       return contexto.parar;
     })
     
