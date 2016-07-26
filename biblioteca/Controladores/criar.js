@@ -63,7 +63,7 @@ Criar.prototype.escrever = function(req, res, contexto) {
         var localizacao = estagioFinal.replace(/:(\w+)/g, function(encontrado, $1) {
           return instancia[$1];
         });
-        res.set('Location': localizacao);
+        res.set('Location', localizacao);
       }
 
       if (meuObjt.fonte.seForRecarregarInstancias === true) {

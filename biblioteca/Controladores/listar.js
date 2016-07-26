@@ -196,7 +196,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
 
       // Informamos o extenção dos items do conteudo.
       if (!!meuObjt.fonte.seForRealizarPaginacao) {
-        res.set('Content-Range': 'items ' + [[start, end].join('-'), resultado.count].join('/'));
+        res.set('Content-Range', 'items ' + [[start, end].join('-'), resultado.count].join('/'));
       }
       res.append('X-total', resultado.count);
   
