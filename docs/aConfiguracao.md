@@ -21,7 +21,7 @@ Para realizar a adição de uma fonte é só informar as propriedades acima para
        nome: 'umModeloDoSequelize'
     ,  sePossuiAssociacoes: true
     ,  seForRealizarPaginacao: true
-    ,  seRecarregarInstancias: true
+    ,  seForRecarregarInstancias: true
     ,  metodoDeAtualizacao: 'put'
     };
 
