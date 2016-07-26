@@ -8,3 +8,4 @@
 - [Utilizando os Controladores, os Percursos e os Ganchos](https://github.com/umdez/restificando/blob/master/docs/aUtilizacao.md)
 - [O que é o Contexto?](https://github.com/umdez/restificando/blob/master/docs/oContexto.md)
 - [Os erros](https://github.com/umdez/restificando/blob/master/docs/osErros.md)
+- [Como realizar a paginação](https://github.com/umdez/restificando/blob/master/docs/aLista.md)
