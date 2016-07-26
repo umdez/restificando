@@ -120,8 +120,9 @@ Listar.prototype.trazer = function(req, res, contexto) {
   }
 
   var oParametroDeSorteio = this.fonte.sorteio.parametro;
-  var oParametroDeOrdenamento = this.fonte.ordenamento.parametro;
-    
+  var oParametroDeOrdenamento = null;
+  console.log('--------------->' + this.fonte.ordenamento);
+  
   if (_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sorteio, 'padrao')) {
     var ordem = [];
     var osNomesDeColunas = [];
