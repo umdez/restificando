@@ -112,6 +112,7 @@ var restificando = {
     , excluirAtributos: opcoes.excluirAtributos                    // Os atributos não necessários e que devem ser excluidos.
     });
 
+    console.log('INICIO: Aquiiii ---->>>>>>'+opcoes.ordenamento);
     return fonte;
   },
 

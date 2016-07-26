@@ -81,7 +81,8 @@ var Fonte = function(opcoes) {
       parametro: 'ord'
     }
   });
-
+  console.log('FONTE: Aquiiii ---->>>>>>'+opcoes.ordenamento);
+  
   // O aplicativo Express
   // @AFAZER: Talvez mudar o nome desta variavel para express? (questão #1)
   this.aplicativo = opcoes.aplicativo;
