@@ -120,8 +120,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
   }
 
   var oParametroDeSorteio = this.fonte.sorteio.parametro;
-  var oParametroDeOrdenamento = null;
-  console.log('--------------->' + this.fonte.ordenamento);
+  var oParametroDeOrdenamento = this.fonte.ordenamento.parametro;
   
   if (_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sorteio, 'padrao')) {
     var ordem = [];

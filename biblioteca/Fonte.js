@@ -81,7 +81,6 @@ var Fonte = function(opcoes) {
       parametro: 'ord'
     }
   });
-  console.log('FONTE: Aquiiii ---->>>>>>'+opcoes.ordenamento);
   
   // O aplicativo Express
   // @AFAZER: Talvez mudar o nome desta variavel para express? (questão #1)
@@ -126,6 +125,7 @@ var Fonte = function(opcoes) {
   // Parametros de busca e sorteio.
   this.busca = opcoes.busca;
   this.sorteio = opcoes.sorteio;
+  this.ordenamento = opcoes.ordenamento;
   
   this.seForRecarregarInstancias = opcoes.seForRecarregarInstancias;
 
