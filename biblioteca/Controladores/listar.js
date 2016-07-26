@@ -120,7 +120,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
   }
 
   var oParametroDeSorteio = this.fonte.sorteio.parametro;
-  var oParametroDeOrdenamento = (this.fonte.ordenamento ? this.fonte.ordenamento.parametro || 'ord' : 'ord');
+  var oParametroDeOrdenamento = this.fonte.ordenamento.parametro;
     
   if (_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sorteio, 'padrao')) {
     var ordem = [];
@@ -131,14 +131,14 @@ Listar.prototype.trazer = function(req, res, contexto) {
     var sortColumns = sortQuery.split(',');
     sortColumns.forEach(function(sortColumn) {
       if (orderQuery) {
-        if (orderQuery === 'DESC' || orderQuery === '1') {
+        if (orderQuery === 'desc' || orderQuery === 'DESC' || orderQuery === '1') {
           ordem.push([sortColumn, 'DESC']);
           osNomesDeColunas.push(sortColumn);
-        } else if (orderQuery === 'ASC' || orderQuery === '-1') {
+        } else if (orderQuery === 'asc' || orderQuery === 'ASC' || orderQuery === '-1') {
           osNomesDeColunas.push(sortColumn);
           ordem.push([sortColumn, 'ASC']);
         } else {
-          throw new erros.ErroDeRequisicaoRuim('Ordem de sorteio informado não é valido.');
+          throw new erros.ErroDeRequisicaoRuim('Ordem de sorteio informada não é valida.');
         }
       } else {
         if (sortColumn.indexOf('-') === 0) {
