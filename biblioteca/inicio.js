@@ -96,19 +96,20 @@ var restificando = {
     }.bind(this));
  
     var fonte = new Fonte({
-      aplicativo: this.aplicativo,                            // O aplicativo Express.
-      sequelize: this.sequelize,                              // O ORM (Object-relational mapping) Sequelize.
-      modelo: opcoes.modelo,                                  // Um modelo do Sequelize.
-      estagiosFinais: estagiosFinais,                         // Os estágio de determinada fonte.
-      acoes: opcoes.acoes,                                    // As ações aceitas por esta fonte. 
-      incluir: opcoes.incluir,                                // Vamos incluir mais alguns modelos?
-      seForRealizarPaginacao: opcoes.seForRealizarPaginacao,        // Caso seja necessário habilitar a paginação para determinada fonte.
-      metodoDeAtualizacao: this.metodoDeAtualizacao,          // Qual será o método para atualização? PUT, POST ou PATCH?
-      busca: opcoes.busca,                                    // O parametro utilizado para a busca.
-      sorteio: opcoes.sorteio,                                // O parametro utilizado para sorteio.
-      seForRecarregarInstancias: opcoes.seForRecarregarInstancias,  // <umdez> Mas o que é isso?
-      sePossuiAssociacoes: opcoes.sePossuiAssociacoes,        // Caso a fonte possua associações com outras fontes.
-      excluirAtributos: opcoes.excluirAtributos               // Os atributos não necessários e que devem ser excluidos.
+      aplicativo: this.aplicativo                                  // O aplicativo Express.
+    , sequelize: this.sequelize                                    // O ORM (Object-relational mapping) Sequelize.
+    , modelo: opcoes.modelo                                        // Um modelo do Sequelize.
+    , estagiosFinais: estagiosFinais                               // Os estágio de determinada fonte.
+    , acoes: opcoes.acoes                                          // As ações aceitas por esta fonte. 
+    , incluir: opcoes.incluir                                      // Vamos incluir mais alguns modelos?
+    , seForRealizarPaginacao: opcoes.seForRealizarPaginacao        // Caso seja necessário habilitar a paginação para determinada fonte.
+    , metodoDeAtualizacao: this.metodoDeAtualizacao                // Qual será o método para atualização? PUT, POST ou PATCH?
+    , busca: opcoes.busca                                          // O parametro utilizado para a busca.
+    , sorteio: opcoes.sorteio                                      // O parametro utilizado para sorteio.
+    , ordenamento: opcoes.ordenamento
+    , seForRecarregarInstancias: opcoes.seForRecarregarInstancias  
+    , sePossuiAssociacoes: opcoes.sePossuiAssociacoes              // Caso a fonte possua associações com outras fontes.
+    , excluirAtributos: opcoes.excluirAtributos                    // Os atributos não necessários e que devem ser excluidos.
     });
 
     return fonte;
