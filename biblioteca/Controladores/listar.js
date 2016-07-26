@@ -15,6 +15,13 @@ var Base = require('./base');
 var _ = require('lodash');
 var erros = require('../Erros');
 
+/* @Objeto Listar().
+ *
+ * Este é o controlador de deleção. Ele é chamado com o seguinte método GET:
+ * fonte.listar    GET /fonte                           (Requisita uma lista de registros desta fonte)                      (List)
+ * 
+ * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
+ ----------------------------------------------------------------------------------------*/
 var Listar = function(args) {
   Listar.super_.call(this, args);
 };
@@ -25,15 +32,22 @@ Listar.prototype.acao = 'listar';
 Listar.prototype.metodo = 'get';
 Listar.prototype.pluralidade = 'plural';
 
-Listar.prototype._safeishParse = function(value) {
+Listar.prototype._safeishParse = function(valor) {
   try {
-    return JSON.parse(value);
+    return JSON.parse(valor);
   } catch(err) {
-    return value;
+    return valor;
   }
 };
 
 var osOperadoresDeTexto = /like|iLike|notLike|notILike/;
+
+/* @Método trazer().
+ * 
+ * @Parametro {Objeto} [req] A requisição feita ao servidor Express.
+ * @Parametro {Objeto} [res] A resposta a requisição ao servidor Express.
+ * @Parametro {Objeto} [contexto] Contêm informações deste contexto.
+ */
 Listar.prototype.trazer = function(req, res, contexto) {
   var meuObjt = this;
   var modelo = this.modelo;
@@ -56,7 +70,7 @@ Listar.prototype.trazer = function(req, res, contexto) {
 
   opcoes.offset = offset;
   opcoes.limit = count;
-  if (!this.fonte.seForRealizarPaginacao) {  // <umdez> Talvez mudar o nome para seForRealizarPaginacao
+  if (!this.fonte.seForRealizarPaginacao) {  
     delete opcoes.limit;
   }
   
@@ -107,100 +121,85 @@ Listar.prototype.trazer = function(req, res, contexto) {
 
   var oParametroDeSorteio = this.fonte.sorteio.parametro;
   var oParametroDeOrdenamento = (this.fonte.ordenamento ? this.fonte.ordenamento.parametro || 'ord' : 'ord');
-  if ((_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sort, 'default')) && !_.has(req.query, oParametroDeOrdenamento)) {
-    var order = [];
-    var columnNames = [];
-    var sortQuery = req.query[oParametroDeSorteio] || this.fonte.sort.default || '';
+    
+  if (_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sorteio, 'padrao')) {
+    var ordem = [];
+    var osNomesDeColunas = [];
+    var sortQuery = req.query[oParametroDeSorteio] || this.fonte.sorteio.padrao || '';
+    var orderQuery = req.query[oParametroDeOrdenamento] || null;
+    
     var sortColumns = sortQuery.split(',');
     sortColumns.forEach(function(sortColumn) {
-      if (sortColumn.indexOf('-') === 0) {
-        var actualName = sortColumn;
-        actualName = sortColumn.substring(1);
-        order.push([actualName, 'DESC']);
-        columnNames.push(actualName);
+      if (orderQuery) {
+        if (orderQuery === 'DESC' || orderQuery === '1') {
+          ordem.push([sortColumn, 'DESC']);
+          osNomesDeColunas.push(sortColumn);
+        } else if (orderQuery === 'ASC' || orderQuery === '-1') {
+          osNomesDeColunas.push(sortColumn);
+          ordem.push([sortColumn, 'ASC']);
+        } else {
+          throw new erros.ErroDeRequisicaoRuim('Ordem de sorteio informado não é valido.');
+        }
       } else {
-        columnNames.push(sortColumn);
-        order.push([sortColumn, 'ASC']);
-      } 
-    });
-    var allowedColumns = this.fonte.sort.attributes || Object.keys(modelo.rawAttributes);
-    var disallowedColumns = _.difference(columnNames, allowedColumns);
-    if (disallowedColumns.length) {
-      throw new erros.ErroDeRequisicaoRuim('Sorting not allowed on given attributes', disallowedColumns);
-    }
-
-    if (order.length) {
-      opcoes.order = order;
-    }  
-  } else if ((_.has(req.query, oParametroDeSorteio) || _.has(this.fonte.sort, 'default')) && _.has(req.query, oParametroDeOrdenamento)) {
-    // Se houver o parametro order nós vamos fazer o sorteio aqui.
-    var order = [];
-    var columnNames = [];
-    var sortQuery = req.query[oParametroDeSorteio] || this.fonte.sort.default || '';
-    var orderQuery = req.query[oParametroDeOrdenamento];
-    var sortColumns = sortQuery.split(',');
-    sortColumns.forEach(function(sortColumn) {
-      var actualName = sortColumn;
-      if (sortColumn.indexOf('-') === 0) {
-        actualName = sortColumn.substring(1);
-      }
-      if (orderQuery === 'DESC' || orderQuery === '1') {
-        order.push([actualName, 'DESC']);
-        columnNames.push(actualName);
-      } else if (orderQuery === 'ASC' || orderQuery === '-1') {
-        columnNames.push(sortColumn);
-        order.push([sortColumn, 'ASC']);
-      } else {
-         throw new erros.ErroDeRequisicaoRuim('Ordem de sorteio incorreto.');
+        if (sortColumn.indexOf('-') === 0) {
+          var actualName = sortColumn;
+          actualName = sortColumn.substring(1);
+          ordem.push([actualName, 'DESC']);
+          osNomesDeColunas.push(actualName);
+        } else {
+          osNomesDeColunas.push(sortColumn);
+          ordem.push([sortColumn, 'ASC']);
+        } 
       }
     });
-    var allowedColumns = this.fonte.sort.attributes || Object.keys(modelo.rawAttributes);
-    var disallowedColumns = _.difference(columnNames, allowedColumns);
-    if (disallowedColumns.length) {
-      throw new erros.ErroDeRequisicaoRuim('Sorting not allowed on given attributes', disallowedColumns);
+    var asColunasPermitidas = this.fonte.sorteio.atributos || Object.keys(modelo.rawAttributes);
+    var asColunasNaoPermitidas = _.difference(osNomesDeColunas, asColunasPermitidas);
+    if (asColunasNaoPermitidas.length) {
+      throw new erros.ErroDeRequisicaoRuim('O sorteio não é permitido para estes atributos ', asColunasNaoPermitidas);
     }
 
-    if (order.length) {
-      opcoes.order = order;
+    if (ordem.length) {
+      opcoes.order = opcoes.ordem = ordem;
     }
   }
 
-  // all other query parameters are passed to search
-  var extraSearchCriteria = _.reduce(req.query, function(result, value, key) {
-    if (_.has(modelo.rawAttributes, key)) result[key] = meuObjt._safeishParse(value);
-    return result;
+  // Todos os outros parametros do query são passados para a pesquisa
+  var osCriteriosExtrasDePesquisa = _.reduce(req.query, function(resultado, valor, chave) {
+    if (_.has(modelo.rawAttributes, chave)) resultado[chave] = meuObjt._safeishParse(valor);
+    return resultado;
   }, {});
 
-  if (Object.keys(extraSearchCriteria).length)
-    criterio = _.assign(criterio, extraSearchCriteria);
+  if (Object.keys(osCriteriosExtrasDePesquisa).length)
+    criterio = _.assign(criterio, osCriteriosExtrasDePesquisa);
 
-  // do the actual lookup
-  if (Object.keys(criterio).length)
+  // Realizar um lookup real
+  if (Object.keys(criterio).length) {
     opcoes.where = criterio;
-
+  }
+  
   return modelo
     .findAndCountAll(opcoes)
-    .then(function(result) {
-      contexto.instance = result.rows;
+    .then(function(resultado) {
+      contexto.instancia = resultado.rows;
       var start = offset;
-      var end = start + result.rows.length - 1;
+      var end = start + resultado.rows.length - 1;
       end = end === -1 ? 0 : end;
 
-      if (meuObjt.fonte.associationOptions.removeForeignKeys) {
-        _.each(contexto.instance, function(instance) {
-          _.each(incluirEstesAtributos, function(attr) {
-            delete instance[attr];
-            delete instance.dataValues[attr];
+      if (meuObjt.fonte.opcoesDeAssociacao.removerChaveEstrangeira) {
+        _.each(contexto.instancia, function(instancia) {
+          _.each(incluirEstesAtributos, function(atrib) {
+            delete instancia[atrib];
+            delete instancia.dataValues[atrib];
           });
         });
       }
 
       if (!!meuObjt.fonte.seForRealizarPaginacao)
-        res.header('Content-Range', 'items ' + [[start, end].join('-'), result.count].join('/'));
+        res.header('Content-Range', 'items ' + [[start, end].join('-'), resultado.count].join('/'));
         
         // Informamos o total de registros desta listagem.
         // A paginação necessita disso.
-        res.set({'X-total': result.count});
+        res.set({'X-total': resultado.count});
   
       return contexto.continuar;
     });
