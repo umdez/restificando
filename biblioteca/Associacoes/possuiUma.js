@@ -36,6 +36,6 @@ module.exports = function(Fonte, fonte, associacao) {
   });
 
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
-  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identifierField ];
+  fonteAssociada.controladores.ler.incluirEstesAtributos = [ associacao.identifierField ];
   return fonteAssociada;
 };

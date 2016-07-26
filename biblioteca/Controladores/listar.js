@@ -194,12 +194,11 @@ Listar.prototype.trazer = function(req, res, contexto) {
         });
       }
 
-      if (!!meuObjt.fonte.seForRealizarPaginacao)
-        res.header('Content-Range', 'items ' + [[start, end].join('-'), resultado.count].join('/'));
-        
-        // Informamos o total de registros desta listagem.
-        // A paginação necessita disso.
-        res.set({'X-total': resultado.count});
+      // Informamos o extenção dos items do conteudo.
+      if (!!meuObjt.fonte.seForRealizarPaginacao) {
+        res.set('Content-Range': 'items ' + [[start, end].join('-'), resultado.count].join('/'));
+      }
+      res.append('X-total', resultado.count);
   
       return contexto.continuar;
     });

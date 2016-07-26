@@ -41,8 +41,8 @@ module.exports = function(Fonte, fonte, associacao) {
   });
 
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
-  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identifierField ];
-  fonteAssociada.controladores.listar.incluirAtributos = [ associacao.identifierField ];
+  fonteAssociada.controladores.ler.incluirEstesAtributos = [ associacao.identifierField ];
+  fonteAssociada.controladores.listar.incluirEstesAtributos = [ associacao.identifierField ];
 
   fonteAssociada.listar.trazer.antesQue(function(requisicao, resposta, contexto) {
     // Filtramos
