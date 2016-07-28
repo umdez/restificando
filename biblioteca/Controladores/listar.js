@@ -18,7 +18,7 @@ var erros = require('../Erros');
 /* @Objeto Listar().
  *
  * Este é o controlador de deleção. Ele é chamado com o seguinte método GET:
- * fonte.listar    GET /fonte                           (Requisita uma lista de registros desta fonte)                      (List)
+ * fonte.listar    GET /fonte   (Requisita uma lista de registros desta fonte)  (List)
  * 
  * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
  ----------------------------------------------------------------------------------------*/
@@ -194,11 +194,12 @@ Listar.prototype.trazer = function(req, res, contexto) {
         });
       }
 
-      // Informamos o extenção dos items do conteudo.
       if (!!meuObjt.fonte.seForRealizarPaginacao) {
+        // Informamos o extenção dos items do conteudo.
         res.set('Content-Range', 'items ' + [[start, end].join('-'), resultado.count].join('/'));
+        // Informamos o total de registros encontrados
+        res.append('X-total', resultado.count);
       }
-      res.append('X-total', resultado.count);
   
       return contexto.continuar;
     });

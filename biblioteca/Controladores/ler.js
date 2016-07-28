@@ -17,7 +17,7 @@ var erros = require('../Erros');
 /* @Objeto Ler().
  *
  * Este é o controlador de leitura. Ele é chamado com o seguinte método GET:
- * fonte.ler       GET /fonte/:identificador            (Requisita um unico registro desta fonte passando um identificador) (Read)
+ * fonte.ler   GET /fonte/:identificador  (Requisita um unico registro desta fonte passando um identificador) (Read)
  * 
  * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
  ----------------------------------------------------------------------------------------*/

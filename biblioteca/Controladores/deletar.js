@@ -17,7 +17,7 @@ var ControladorDeLeitura = require('./ler');
 /* @Objeto Deletar().
  *
  * Este é o controlador de deleção. Ele é chamado com o seguinte método DELETE:
- * fonte.deletar   DELETE /fonte/:identificador         (Requisita a remoção de um registro desta fonte)                    (Delete)
+ * fonte.deletar  DELETE /fonte/:identificador  (Requisita a remoção de um registro desta fonte) (Delete)
  * 
  * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
  ----------------------------------------------------------------------------------------*/

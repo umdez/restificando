@@ -17,7 +17,7 @@ var Base = require('./base');
 /* @Objeto Criar().
  *
  * Este é o controlador de criação. Ele é chamado com o seguinte método POST:
- * fonte.criar     POST /fonte                          (Requisita a criação de um registro para esta fonte)                (Create)
+ * fonte.criar  POST /fonte   (Requisita a criação de um registro para esta fonte)  (Create)
  * 
  * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
  ----------------------------------------------------------------------------------------*/

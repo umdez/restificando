@@ -18,7 +18,7 @@ var ControladorDeLeitura = require('./ler');
 /* @Objeto Atualizar().
  *
  * Este é o controlador de atualização. Ele é chamado com o seguinte método PUT|POST|PATCH:
- * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)                (Update)
+ * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)  (Update)
  * 
  * @Veja https://github.com/umdez/restificando/blob/master/docs/osControladores.md
  ----------------------------------------------------------------------------------------*/
