@@ -48,7 +48,7 @@ module.exports = function(Fonte, fonte, associacao) {
     // Filtramos
     contexto.criterio = contexto.criterio || {};
     contexto.criterio[associacao.identifierField] = requisicao.params[associacao.identifierField];
-    contexto.continue();
+    contexto.continuar();
   });
 
   return fonteAssociada;
