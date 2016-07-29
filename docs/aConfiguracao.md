@@ -15,33 +15,35 @@ Podemos configurar cada fonte para um modelo do sequelize. Para isso temos as di
 
 Para realizar a adição de uma fonte é só informar as propriedades acima para o método fonte.
 
-    var restificando = require('restificando');
-    
-    var fonte = {
-       nome: 'umModeloDoSequelize'
-    ,  sePossuiAssociacoes: true
-    ,  seForRealizarPaginacao: true
-    ,  seForRecarregarInstancias: true
-    ,  metodoDeAtualizacao: 'put'
-    };
+```javascript
+var restificando = require('restificando');
 
-    fonte.estagiosFinais = [ 
-      '/Fontes'              
-    , '/Fontes/:id'
-    ];  
+var fonte = {
+   nome: 'umModeloDoSequelize'
+,  sePossuiAssociacoes: true
+,  seForRealizarPaginacao: true
+,  seForRecarregarInstancias: true
+,  metodoDeAtualizacao: 'put'
+};
+
+fonte.estagiosFinais = [ 
+  '/Fontes'              
+, '/Fontes/:id'
+];  
     
-    fonte.busca = {
-      parametro: 'busc'  
-    , operador: '$like' 
-    , atributos: []   
-    };
+fonte.busca = {
+  parametro: 'busc'  
+, operador: '$like' 
+, atributos: []   
+};
     
-    // Carregamos as fontes deste determinado modelo
-    restificando.fonte(fonte);
+// Carregamos as fontes deste determinado modelo
+restificando.fonte(fonte);
     
-    // Inicia o serviço REST Restificando.
-    restificando.inicializar({
-      aplicativo: aplicativo  // Aplicativo Express.
-    , sequelize: sequelize    // Nosso ORM Sequelize.
-    , base: ''        
-    });
+// Inicia o serviço REST Restificando.
+restificando.inicializar({
+  aplicativo: aplicativo  // Aplicativo Express.
+, sequelize: sequelize    // Nosso ORM Sequelize.
+, base: ''        
+});
+```
