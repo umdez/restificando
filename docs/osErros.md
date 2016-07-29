@@ -15,5 +15,7 @@ Também utilizaremos um retorno caso tudo esteja correto.
 |---|---|
 |RequisicaoCompleta()| Quando a requisição realizada ocorreu bem e completou|
 
-      // Assim que necessário o erro pode ser lançado (throw)
-      throw new ErroDeProibicao("Não é possível deletar este usuário");
+```javascript
+// Assim que necessário o erro pode ser lançado (throw)
+throw new ErroDeProibicao("Não é possível deletar este usuário");
+```
