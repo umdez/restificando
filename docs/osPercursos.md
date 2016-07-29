@@ -15,11 +15,12 @@ Para cada um dos **controladores** de uma **fonte** existem também os **percurs
 Nós podemos então utilizar os **percursos** acima para uma diversidade de coisas, no exemplo abaixo nós apresentamos uma forma de 
 proibir qualquer tentativa de apagar um registro no modelo 'usuarios'
 
-    // Não permitir remoção do registro do usuario
-    usuarios.deletar.autenticar(function(req, res, contexto) {
-      // Pode ser por meio de um throw
-      // throw new ErroDeProibicao("Não é possível deletar este usuário");
-      // Ou pode ser retornando um erro:
-      // return contexto.error(403, "Não é possível deletar este usuário");
-    })
-
+```javascript
+// Não permitir remoção do registro do usuario
+usuarios.deletar.autenticar(function(req, res, contexto) {
+  // Pode ser por meio de um throw
+  // throw new ErroDeProibicao("Não é possível deletar este usuário");
+  // Ou pode ser retornando um erro:
+  // return contexto.erro(403, "Não é possível deletar este usuário");
+})
+```
