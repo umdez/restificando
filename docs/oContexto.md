@@ -26,6 +26,6 @@ fonte.deletar.autenticar.acao(function(req, res, contexto) {
 
 // Para fazer parar a execução no percurso de envio
 fonte.ler.enviar.antesQue(function(req, res, contexto) {
-  return contexto.error(403, "Não será permitido que se envie dados para você neste momento.");
+  return contexto.erro(403, "Não será permitido que se envie dados para você neste momento.");
 })
 ```
