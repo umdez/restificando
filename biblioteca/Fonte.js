@@ -18,8 +18,8 @@
 var Controladores = require('./Controladores/indice');
 var possuiUmaFonte = require('./Associacoes/possuiUma');
 var possuiMuitasFontes = require('./Associacoes/possuiMuitas');
-//var pertenceAUmaFonte = require('./Associacoes/pertenceAUma');
-//var pertenceAMuitasFontes = require('./Associacoes/pertenceAMuitas');
+var pertenceAUmaFonte = require('./Associacoes/pertenceAUma');
+var pertenceAMuitasFontes = require('./Associacoes/pertenceAMuitas');
 var _ = require('lodash');
 
 /* @Objeto Fonte().
@@ -280,10 +280,10 @@ function autoAssociar(fonte) {
       fonte[nomeDaSubFonte] = possuiMuitasFontes(Fonte, fonte, associacao);
     } else if (associacao.associationType === 'BelongsTo') {
       nomeDaSubFonte = associacao.target.options.name.singular.toLowerCase();
-      // fonte[nomeDaSubFonte] = belongsToResource(Fonte, fonte, associacao);
+      fonte[nomeDaSubFonte] = pertenceAUmaFonte(Fonte, fonte, associacao);
     } else if (associacao.associationType === 'BelongsToMany') {
      nomeDaSubFonte = associacao.target.options.name.plural.toLowerCase();
-      // fonte[nomeDaSubFonte] = belongsToManyResource(Fonte, fonte, associacao);
+     fonte[nomeDaSubFonte] = pertenceAMuitasFontes(Fonte, fonte, associacao);
     }
   });
 }

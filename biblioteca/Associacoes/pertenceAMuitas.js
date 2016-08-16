@@ -28,15 +28,15 @@ var _ = require('lodash');
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
   // acesso aos est�gios
-  var subNomeDaFonte = associacao.alvo.opcoes.nome.plural.toLowerCase();
+  var subNomeDaFonte = associacao.target.options.name.plural.toLowerCase();
 
   // Procurar associa��o inversa
   var associacaoEmparelhada;
-  if (associacao.emparelhada) {
-    associacaoEmparelhada = _.find(associacao.alvo.associacoes, associacao.emparelhada);
+  if (associacao.paired) {
+    associacaoEmparelhada = _.find(associacao.target.associations, associacao.paired);
   } else {
-    associacaoEmparelhada = _.findWhere(associacao.alvo.associacoes, {
-      emparelhada: associacao
+    associacaoEmparelhada = _.findWhere(associacao.target.associations, {
+      paired: associacao
     });
   }
 
@@ -48,10 +48,10 @@ module.exports = function(Fonte, fonte, associacao) {
   var fonteAssociada = new Fonte({
     aplicativo: fonte.aplicativo,
     sequelize: fonte.sequelize,
-    modelo: associacao.alvo,
+    modelo: associacao.target,
     estagiosFinais: [
       fonte.estagiosFinais.singular + '/' + subNomeDaFonte,
-      fonte.estagiosFinais.plural + '/:' + associacaoEmparelhada.campoDeIdentificacaoExtrangeira + '/' + subNomeDaFonte + '/:id'
+      fonte.estagiosFinais.plural + '/:' + associacaoEmparelhada.foreignIdentifierField  + '/' + subNomeDaFonte + '/:id'
     ],
     acoes: ['ler', 'listar']
   });
@@ -59,46 +59,46 @@ module.exports = function(Fonte, fonte, associacao) {
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
   fonteAssociada.ler.trazer.antesQue(function(requisicao, resposta, contexto) {
     var emQueLocal = {};
-    emQueLocal[associacao.fonte.campoDeChavePrimaria] = requisicao.params[associacaoEmparelhada.campoDeIdentificacaoExtrangeira];
-    delete requisicao.params[associacaoEmparelhada.campoDeIdentificacaoExtrangeira];
+    emQueLocal[associacao.source.primaryKeyField] = requisicao.params[associacaoEmparelhada.foreignIdentifierField];
+    delete requisicao.params[associacaoEmparelhada.foreignIdentifierField];
 
     contexto.incluir = contexto.incluir || [];
     contexto.incluir.push({
-      associacao: associacaoEmparelhada,
-      emQueLocal: emQueLocal
+      association: associacaoEmparelhada,
+      where: emQueLocal
     });
-    contexto.continue();
+    contexto.continuar();
   });
 
   fonteAssociada.ler.enviar.antesQue(function(requisicao, resposta, contexto) {
     delete contexto.instancia.dataValues[associacaoEmparelhada.as];
-    contexto.continue();
+    contexto.continuar();
   });
 
-  fonteAssociada.list.trazer.antesQue(function(requisicao, resposta, contexto) {
+  fonteAssociada.listar.trazer.antesQue(function(requisicao, resposta, contexto) {
     // Filtra
     var emQueLocal = {};
-    emQueLocal[associacao.fonte.campoDeChavePrimaria] = requisicao.params.id;
+    emQueLocal[associacao.source.primaryKeyField] = requisicao.params.id;
 
     contexto.incluir = contexto.incluir || [];
     contexto.incluir.push({
-      associacao: associacaoEmparelhada,
-      emQueLocal: emQueLocal
+      association: associacaoEmparelhada,
+      where: emQueLocal
     });
 
-    contexto.continue();
+    contexto.continuar();
   });
 
   fonteAssociada.listar.enviar.antesQue(function(requisicao, resposta, contexto) {
-    contexto.instancia.forEach(function(instance) {
-      if (instance.dataValues[associacaoEmparelhada.as]) {
-        instance.dataValues[associacaoEmparelhada.as].forEach(function(a) {
+    contexto.instancia.forEach(function(instancia) {
+      if (instancia.dataValues[associacaoEmparelhada.as]) {
+        instancia.dataValues[associacaoEmparelhada.as].forEach(function(a) {
           delete a.dataValues[associacaoEmparelhada.combinedName];
         });
       }
     });
 
-    contexto.continue();
+    contexto.continuar();
   });
 
   return fonteAssociada;
