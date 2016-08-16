@@ -24,16 +24,18 @@ var _ = require('lodash');
 
 /* @Objeto Fonte().
  *
- * Aqui nós temos o objeto para uma fonte qualquer. Cada fonte possui controladores que estão listados abaixo:
- * 
+ * Aqui nós temos o objeto para uma fonte qualquer. Cada fonte possui
+ * controladores que estão listados abaixo:
+ *
  * fonte.criar     POST /fonte                          (Requisita a criação de um registro para esta fonte)                (Create)
  * fonte.listar    GET /fonte                           (Requisita uma lista de registros desta fonte)                      (List)
  * fonte.ler       GET /fonte/:identificador            (Requisita um unico registro desta fonte passando um identificador) (Read)
  * fonte.atualizar PUT|POST|PATCH /fonte/:identificador (Requisita a atualização de um registro desta fonte)                (Update)
  * fonte.deletar   DELETE /fonte/:identificador         (Requisita a remoção de um registro desta fonte)                    (Delete)
  *
- * É necessário informar que para cada um destes controladores listados acima também possuirá os percursos, cada 
- * percurso será executado na ordem listada abaixo:
+ * É necessário informar que para cada um destes controladores listados acima
+ * também possuirá os percursos, cada percurso será executado na ordem listada
+ * abaixo:
  * 
  * fonte.controlador.iniciar    (Chamado no inicio)                                                    (Start) 
  * fonte.controlador.autenticar (Utilizado para autenticação)                                          (Auth)
@@ -102,7 +104,8 @@ var Fonte = function(opcoes) {
     this.excluirAtributos = opcoes.excluirAtributos;
   } 
   
-  // Filtramos os atributos a serem excluidos, caso contrário nós adicionaremos todos os atributos brutos.
+  // Filtramos os atributos a serem excluidos, caso contrário nós adicionaremos
+  // todos os atributos brutos.
   this.atributos = (!opcoes.excluirAtributos.length) ? Object.keys(this.modelo.rawAttributes) : Object.keys(this.modelo.rawAttributes).filter(function(atrib) {
     return opcoes.excluirAtributos.indexOf(atrib) === -1;
   });
@@ -133,7 +136,8 @@ var Fonte = function(opcoes) {
     removerChaveEstrangeira: false
   };
 
-  // As relações entre os modelos. Ex. pertenceAUma, possuiUma, possuiMuitas e pertenceAMuitas.
+  // As relações entre os modelos. Ex. pertenceAUma, possuiUma, possuiMuitas e
+  // pertenceAMuitas.
   if (!!opcoes.sePossuiAssociacoes) {
     if (_.isObject(opcoes.sePossuiAssociacoes)) {
       this.opcoesDeAssociacao = _.extend(this.opcoesDeAssociacao, opcoes.sePossuiAssociacoes);
@@ -168,7 +172,8 @@ var Fonte = function(opcoes) {
         meuObjt.controladores[acao].percurso(gancho, f);
       };
 
-      // <umdez> Ainda não sei como esta parte funciona, porque os ganchos estão sendo adicionados novamente.
+      // <umdez> Ainda não sei como esta parte funciona, porque os ganchos estão
+      // sendo adicionados novamente.
       meuObjt[acao][gancho].antesQue = function(f) {
         meuObjt.controladores[acao].percurso(gancho + '_antesQue', f);
       };

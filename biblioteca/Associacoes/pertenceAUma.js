@@ -1,48 +1,50 @@
 'use strict';
 
 /*******************************************************************
- * Restificando é de (C) propriedade da Devowly Sistemas 2015-2016 *
+ * Restificando ï¿½ de (C) propriedade da Devowly Sistemas 2015-2016 *
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id pertenceAUma.js, criado em 31/05/2016 às 18:41 por Leo Felippe $
+ * $Id pertenceAUma.js, criado em 31/05/2016 ï¿½s 18:41 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versï¿½o atual 0.0.1-Beta
  */
 
-/* Exporta uma função para realizar o tipo de associação one-to-one. Nesse tipo de associação, os dois modelos
- * estarão conectados por uma única chave extrangeira.
+/* Exporta uma funï¿½ï¿½o para realizar o tipo de associaï¿½ï¿½o one-to-one. Nesse tipo
+ * de associaï¿½ï¿½o, os dois modelos estarï¿½o conectados por uma ï¿½nica chave
+ * extrangeira.
  *
- * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
- * pertenceAUma ou BelongsTo. Existem vários tipos de associações entre modelos em um banco de dados.
- * Cada associação denota um tipo de relação entre modelos dum banco de dados qualquer. E aqui,
- * temos uma associação de um-para-um. Lembre-se que nesse tipo de relação, a chave 
- * extrangeira existe no modelo fonte.
+ * Exportamos aqui mais um tipo de associaï¿½ï¿½o para algum modelo. Aqui temos a
+ * associaï¿½ï¿½o de pertenceAUma ou BelongsTo. Existem vï¿½rios tipos de associaï¿½ï¿½es
+ * entre modelos em um banco de dados. Cada associaï¿½ï¿½o denota um tipo de relaï¿½ï¿½o
+ * entre modelos dum banco de dados qualquer. E aqui, temos uma associaï¿½ï¿½o de
+ * um-para-um. Lembre-se que nesse tipo de relaï¿½ï¿½o, a chave extrangeira existe
+ * no modelo fonte.
  *
- * @Parametro {Objeto} [Fonte] Contêm objeto com atributos e métodos para uma fonte.
+ * @Parametro {Objeto} [Fonte] Contï¿½m objeto com atributos e mï¿½todos para uma fonte.
  * @Parametro {Objeto} [fonte] 
  * @Parametro {Objeto} [associacao] 
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
-  // acesso aos estágios
-  var subNomeDaFonte = associacao.alvo.opcoes.nome.singular.toLowerCase();
+  // acesso aos estï¿½gios
+  var subNomeDaFonte = associacao.target.options.name.singular.toLowerCase();
 
   var fonteAssociada = new Fonte({
     aplicativo: fonte.aplicativo,
     sequelize: fonte.sequelize,
-    modelo: associacao.alvo,
+    modelo: associacao.target,
     estagiosFinais: [fonte.estagiosFinais.singular + '/' + subNomeDaFonte],
     acoes: ['ler']
   });
 
   fonteAssociada.opcoesDeAssociacao = fonte.opcoesDeAssociacao;
-  fonteAssociada.controladores.ler.incluirAtributos = [ associacao.identificadorDeCampo ];
+  fonteAssociada.controladores.ler.incluirEstesAtributos = [ associacao.identifierField ];
 
   fonteAssociada.ler.enviar.antesQue(function(requisicao, resposta, contexto) {
     if (this.fonte.opcoesDeAssociacao.removerChaveEstrangeira) {
-      delete contexto.instancia.valoresDosDados[associacao.identificadorDeCampo];
+      delete contexto.instancia.dataValues[associacao.identifierField];
     }
-    contexto.continue();
+    contexto.continuar();
   });
 
   return fonteAssociada;

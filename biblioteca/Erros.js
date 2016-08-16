@@ -14,11 +14,11 @@ var Utilitario = require('util');
 
 /* @Objeto RestificandoErro().
  *
- * Responsável por oferecer uma organização básica das respostas de erro ou 
- * de sucesso que são possíveis neste serviço. 
+ * Responsável por oferecer uma organização básica das respostas de erro ou de
+ * sucesso que são possíveis neste serviço.
  * @Veja https://gist.github.com/justmoon/15511f92e5216fa2624b
  *
- * Posteriormente nós iremos extender objetos de erro com as caracteristicas 
+ * Posteriormente nós iremos extender objetos de erro com as caracteristicas
  * básicas deste objeto. As extenções atuais são listadas abaixo:
  *
  * - [ERRO 500] Erro base que pode acontecer no nosso próprio serviço.

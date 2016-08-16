@@ -1,34 +1,36 @@
 'use strict';
 
 /*******************************************************************
- * Restificando é de (C) propriedade da Devowly Sistemas 2015-2016 *
+ * Restificando ï¿½ de (C) propriedade da Devowly Sistemas 2015-2016 *
  *                 https://github.com/devowly                      *
  *******************************************************************
  * 
- * $Id pertenceAMuitas.js, criado em 31/05/2016 às 18:41 por Leo Felippe $
+ * $Id pertenceAMuitas.js, criado em 31/05/2016 ï¿½s 18:41 por Leo Felippe $
  *
- * Versão atual 0.0.1-Beta
+ * Versï¿½o atual 0.0.1-Beta
  */
 
 var _ = require('lodash');
 
-/* Exporta uma função para realizar o tipo de associação Belongs-To-Many. Esse tipo de associação 
- * conecta um modelo fonte especifico com multiplos modelos alvos. Posteriormente os alvos
- * podem também ter conexões com multiplos modelos fonte.
+/* Exporta uma funï¿½ï¿½o para realizar o tipo de associaï¿½ï¿½o Belongs-To-Many. Esse
+ * tipo de associaï¿½ï¿½o conecta um modelo fonte especifico com multiplos modelos
+ * alvos. Posteriormente os alvos podem tambï¿½m ter conexï¿½es com multiplos
+ * modelos fonte.
  * 
- * Exportamos aqui mais um tipo de associação para algum modelo. Aqui temos a associação de 
- * pertenceAMuitas ou belongsToMany. Existem vários tipos de associações em um banco de dados.
- * Cada associação denota um tipo de relação entre modelos dum banco de dados qualquer. 
+ * Exportamos aqui mais um tipo de associaï¿½ï¿½o para algum modelo. Aqui temos a
+ * associaï¿½ï¿½o de pertenceAMuitas ou belongsToMany. Existem vï¿½rios tipos de
+ * associaï¿½ï¿½es em um banco de dados. Cada associaï¿½ï¿½o denota um tipo de relaï¿½ï¿½o
+ * entre modelos dum banco de dados qualquer.
  *
- * @Parametro {Objeto} [Fonte] Contêm objeto com atributos e métodos para uma fonte.
+ * @Parametro {Objeto} [Fonte] Contï¿½m objeto com atributos e mï¿½todos para uma fonte.
  * @Parametro {Objeto} [fonte] 
  * @Parametro {Objeto} [associacao] 
  ----------------------------------------------------------------------------------------*/
 module.exports = function(Fonte, fonte, associacao) {
-  // acesso aos estágios
+  // acesso aos estï¿½gios
   var subNomeDaFonte = associacao.alvo.opcoes.nome.plural.toLowerCase();
 
-  // Procurar associação inversa
+  // Procurar associaï¿½ï¿½o inversa
   var associacaoEmparelhada;
   if (associacao.emparelhada) {
     associacaoEmparelhada = _.find(associacao.alvo.associacoes, associacao.emparelhada);
@@ -39,7 +41,7 @@ module.exports = function(Fonte, fonte, associacao) {
   }
 
   if (!associacaoEmparelhada) {
-    // Não criar a fonte
+    // Nï¿½o criar a fonte
     return;
   }
 
