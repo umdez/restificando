@@ -177,6 +177,10 @@ Listar.prototype.trazer = function(req, res, contexto) {
     opcoes.where = criterio;
   }
   
+  if (req.query.escopo) {
+    modelo = modelo.scope(req.query.escopo);
+  }
+
   return modelo
     .findAndCountAll(opcoes)
     .then(function(resultado) {
